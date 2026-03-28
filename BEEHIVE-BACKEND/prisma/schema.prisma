@@ -1,0 +1,477 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================================
+// USERS (Standalone - no relationships)
+// ============================================================================
+model users {
+  id            String    @id
+  email         String    @unique
+  password      String
+  name          String
+  role          user_role @default(CUSTOMER)
+  phone         String?
+  cardNumber    String?   @unique
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime
+  lastLoginAt   DateTime?
+
+  @@index([email])
+  @@index([role])
+  @@index([cardNumber])
+}
+
+// ============================================================================
+// CATEGORIES & MENU ITEMS
+// ============================================================================
+
+model categories {
+  id          String       @id @db.VarChar(255)
+  name        String       @unique @db.VarChar(255)
+  displayName String       @db.VarChar(255)
+  description String?
+  sortOrder   Int?         @default(0)
+  isActive    Boolean?     @default(true)
+  createdAt   DateTime?    @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime?    @default(now()) @db.Timestamp(6)
+
+  // Relationships:
+  // categories 1 -------- 0..* menu_items (One category has zero to many menu items)
+  menu_items  menu_items[]
+
+  @@index([name])
+  @@index([isActive], map: "categories_isactive_idx")
+  @@index([sortOrder], map: "categories_sortorder_idx")
+}
+
+model menu_items {
+  id                    String                  @id
+  name                  String
+  price                 Float
+  cost                  Float?                  @default(0)
+  image                 String?
+  description           String?
+  available             Boolean                 @default(true)
+  featured              Boolean                 @default(false)
+  prepTime              Int?                    @default(5)
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime
+  categoryId            String                  @db.VarChar(255)
+  itemType              menu_item_type          @default(BASE)
+  showInMenu            Boolean                 @default(false)
+  archived              Boolean                 @default(false)
+  outOfStock            Boolean                 @default(false)
+
+  // Relationships:
+  // menu_items *..1 -------- 1 categories (Each menu item belongs to exactly one category)
+  category              categories              @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "menu_items_categoryid_fkey")
+
+  // menu_items 1 -------- 0..* order_items (One menu item can appear in zero to many order items)
+  order_items           order_items[]
+
+  // menu_items 1 -------- 0..* menu_item_ingredients (One menu item can have zero to many ingredients)
+  menu_item_ingredients menu_item_ingredients[]
+
+  // menu_items 1 -------- 0..* menu_item_variants (One menu item can have zero to many variants)
+  variants              menu_item_variants[]
+
+  // menu_items (as base) 1 -------- 0..* menu_item_addons (One base item can allow zero to many add-ons)
+  allowed_addons        menu_item_addons[]      @relation("BaseItemAddons")
+
+  // menu_items (as addon) 1 -------- 0..* menu_item_addons (One addon item can be allowed for zero to many base items)
+  addon_for_items       menu_item_addons[]      @relation("AddonItem")
+
+  @@index([available])
+  @@index([featured])
+  @@index([categoryId], map: "menu_items_categoryid_idx")
+  @@index([itemType])
+}
+
+// ============================================================================
+// ORDERS & ORDER ITEMS
+// ============================================================================
+
+model order_items {
+  id         String            @id
+  orderId    String
+  menuItemId String
+  quantity   Int
+  price      Float
+  subtotal   Float
+  status     order_item_status @default(PREPARING)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime
+  variantId  String?
+  notes      String?
+
+  // Relationships:
+  // order_items *..1 -------- 1 orders (Each order item belongs to exactly one order)
+  orders     orders            @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // order_items *..1 -------- 1 menu_items (Each order item references exactly one menu item)
+  menu_items menu_items        @relation(fields: [menuItemId], references: [id])
+
+  // order_items *..1 -------- 0..1 menu_item_variants (Each order item may have zero or one variant)
+  variant    menu_item_variants? @relation(fields: [variantId], references: [id])
+
+  // order_items 1 -------- 0..* order_item_addons (One order item can have zero to many add-ons)
+  order_item_addons order_item_addons[]
+
+  @@index([menuItemId])
+  @@index([orderId])
+  @@index([status])
+  @@index([variantId])
+}
+
+model orders {
+  id                String         @id
+  orderNumber       String         @unique
+  customerName      String?
+  tableNumber       String?
+  status            order_status   @default(PREPARING)
+  subtotal          Float
+  tax               Float
+  totalAmount       Float
+  paymentMethod     String?
+  paymentStatus     payment_status @default(UNPAID)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime
+  completedAt       DateTime?
+  orderType         order_type     @default(DINE_IN)
+  linkedOrderId     String?
+  createdBy         String?
+  deviceId          String?
+  processedBy       String?
+  authorizedBy      String?
+  discountAmount    Float          @default(0)
+  notes             String?
+  paidAt            DateTime?
+  cashReceived      Float?
+  changeAmount      Float?
+  deliveryFee       Float          @default(0)
+  serviceFee        Float          @default(0)
+
+  // Relationships:
+  // orders 1 -------- 1..* order_items (One order has one to many order items)
+  order_items       order_items[]
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([linkedOrderId])
+  @@index([createdBy])
+  @@index([deviceId])
+  @@index([processedBy])
+  @@index([paymentStatus])
+}
+
+// ============================================================================
+// INVENTORY & STOCK
+// ============================================================================
+
+model inventory_items {
+  id                   String                  @id
+  name                 String
+  category             inventory_category
+  currentStock         Float
+  minStock             Float
+  maxStock             Float
+  unit                 String
+  costPerUnit          Float
+  supplier             String
+  status               inventory_status        @default(IN_STOCK)
+  lastRestocked        DateTime                @default(now())
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime
+  restockFrequencyDays Int?                    @default(7)
+  archived             Boolean                 @default(false)
+
+  // Relationships:
+  // inventory_items 1 -------- 0..* menu_item_ingredients (One inventory item can be ingredient in zero to many menu items)
+  menu_item_ingredients menu_item_ingredients[]
+
+  // inventory_items 1 -------- 0..* stock_transactions (One inventory item can have zero to many transactions)
+  stock_transactions    stock_transactions[]
+
+  @@index([category])
+  @@index([status])
+  @@index([archived])
+}
+
+// ============================================================================
+// EXPENSES (Standalone - no relationships)
+// ============================================================================
+
+model expenses {
+  id          String            @id
+  category    expense_category
+  date        DateTime
+  amount      Float
+  description String
+  frequency   expense_frequency
+  attachment  String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime
+
+  @@index([date])
+  @@index([category])
+  @@index([frequency])
+}
+
+model stock_transactions {
+  id              String                     @id
+  inventoryItemId String
+  type            stock_transaction_type
+  reason          stock_transaction_reason
+  quantity        Float
+  balanceBefore   Float?                     // Stock balance before this transaction
+  balanceAfter    Float?                     // Stock balance after this transaction
+  status          stock_transaction_status   @default(NORMAL)
+  referenceId     String?
+  receiptImage    String?                    // Optional receipt image URL
+  userId          String?
+  notes           String?
+  createdAt       DateTime                   @default(now())
+
+  // Relationships:
+  // stock_transactions *..1 -------- 1 inventory_items (Each transaction belongs to exactly one inventory item)
+  inventory_item  inventory_items          @relation(fields: [inventoryItemId], references: [id], onDelete: Cascade)
+
+  @@index([inventoryItemId])
+  @@index([type])
+  @@index([reason])
+  @@index([status])
+  @@index([referenceId])
+  @@index([createdAt])
+}
+
+// Junction table: menu_items *..* inventory_items (Many-to-many through menu_item_ingredients)
+// Supports both base product components and variant-specific components
+model menu_item_ingredients {
+  id              String               @id
+  menuItemId      String
+  inventoryItemId String
+  variantId       String?              // Optional: if null, applies to base product; if set, applies only to specific variant
+  quantity        Float
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime
+
+  // Relationships:
+  // menu_item_ingredients *..1 -------- 1 menu_items (Each ingredient record belongs to exactly one menu item)
+  menu_item       menu_items           @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  // menu_item_ingredients *..1 -------- 1 inventory_items (Each ingredient record references exactly one inventory item)
+  inventory_item  inventory_items      @relation(fields: [inventoryItemId], references: [id], onDelete: Cascade)
+
+  // menu_item_ingredients *..1 -------- 0..1 menu_item_variants (Each ingredient can optionally belong to a specific variant)
+  variant         menu_item_variants?  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@unique([menuItemId, inventoryItemId, variantId])
+  @@index([menuItemId])
+  @@index([inventoryItemId])
+  @@index([variantId])
+}
+
+// ============================================================================
+// ADD-ONS & VARIANTS SUPPORT
+// ============================================================================
+
+// Variants for a menu item (e.g., Small/Medium/Large, Hot/Iced)
+model menu_item_variants {
+  id          String        @id
+  menuItemId  String
+  name        String
+  priceDelta  Float         @default(0)
+  isDefault   Boolean       @default(false)
+  sortOrder   Int           @default(0)
+  isActive    Boolean       @default(true)
+  outOfStock  Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime
+
+  // Relationships:
+  // menu_item_variants *..1 -------- 1 menu_items (Each variant belongs to exactly one menu item)
+  menu_item   menu_items    @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  // menu_item_variants 1 -------- 0..* order_items (One variant can be selected in zero to many order items)
+  order_items order_items[]
+
+  // menu_item_variants 1 -------- 0..* menu_item_ingredients (One variant can have zero to many specific ingredients)
+  menu_item_ingredients menu_item_ingredients[]
+
+  @@unique([menuItemId, name])
+  @@index([menuItemId])
+  @@index([isActive])
+}
+
+// Junction table: menu_items (base) *..* menu_items (addon)
+// Links base menu items to their allowed add-ons
+model menu_item_addons {
+  id           String     @id
+  baseItemId   String
+  addonItemId  String
+  maxQuantity  Int        @default(5)
+  sortOrder    Int        @default(0)
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime
+
+  // Relationships:
+  // menu_item_addons *..1 -------- 1 menu_items (base) (Each addon link belongs to exactly one base item)
+  base_item    menu_items @relation("BaseItemAddons", fields: [baseItemId], references: [id], onDelete: Cascade)
+
+  // menu_item_addons *..1 -------- 1 menu_items (addon) (Each addon link references exactly one addon item)
+  addon_item   menu_items @relation("AddonItem", fields: [addonItemId], references: [id], onDelete: Cascade)
+
+  @@unique([baseItemId, addonItemId])
+  @@index([baseItemId])
+  @@index([addonItemId])
+  @@index([isActive])
+}
+
+// Stores selected add-ons for each order item
+model order_item_addons {
+  id          String      @id
+  orderItemId String
+  addonItemId String
+  quantity    Int         @default(1)
+  unitPrice   Float
+  subtotal    Float
+  createdAt   DateTime    @default(now())
+
+  // Relationships:
+  // order_item_addons *..1 -------- 1 order_items (Each order addon belongs to exactly one order item)
+  order_item  order_items @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
+
+  @@unique([orderItemId, addonItemId])
+  @@index([orderItemId])
+  @@index([addonItemId])
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum order_type {
+  DINE_IN
+  TAKEOUT
+  DELIVERY
+}
+
+enum order_status {
+  PENDING
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+enum payment_status {
+  UNPAID
+  PAID
+  REFUNDED
+  COMPLIMENTARY
+  WRITTEN_OFF
+  VOIDED
+}
+
+enum user_role {
+  CUSTOMER
+  CASHIER
+  COOK
+  MANAGER
+  ADMIN
+}
+
+enum inventory_category {
+  INGREDIENTS
+  BEVERAGES
+  PACKAGING
+  SUPPLIES
+}
+
+enum inventory_status {
+  IN_STOCK
+  LOW_STOCK
+  OUT_OF_STOCK
+  DISCREPANCY
+}
+
+enum expense_category {
+  RENT_LEASE
+  UTILITIES
+  ADMINISTRATIVE_SALARIES
+  SOFTWARE_SUBSCRIPTIONS
+  MAINTENANCE
+  OTHER
+}
+
+enum expense_frequency {
+  ONE_TIME
+  MONTHLY
+  QUARTERLY
+  ANNUAL
+}
+
+enum stock_transaction_type {
+  IN
+  OUT
+}
+
+// ============================================================================
+// STOCK TRANSACTION METADATA AUDIT LOG
+// ============================================================================
+// Tracks changes to metadata (receipt, reference, notes) without affecting immutable transaction data
+
+model stock_transaction_metadata_audit {
+  id                   String   @id
+  stockTransactionId   String
+  field                String   // 'referenceId', 'receiptImage', 'notes'
+  oldValue             String?
+  newValue             String?
+  changedBy            String?  // User who made the change
+  changedAt            DateTime @default(now())
+
+  @@index([stockTransactionId])
+  @@index([changedAt])
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum stock_transaction_reason {
+  PURCHASE
+  ORDER
+  WASTE
+  ADJUSTMENT
+  RECONCILIATION
+  VOID
+  CREATED
+  EDITED
+  DELETED
+}
+
+enum stock_transaction_status {
+  NORMAL
+  DISCREPANCY
+}
+
+enum order_item_status {
+  PREPARING
+  COMPLETED
+  VOIDED
+}
+
+// Menu item type for filtering add-ons from main menu
+enum menu_item_type {
+  BASE      // Regular menu items - appear in browsing
+  ADDON     // Add-ons (extra rice, egg) - only selectable after base item chosen
+  DRINK     // Drinks - appear in browsing, may have add-ons (espresso shot)
+}

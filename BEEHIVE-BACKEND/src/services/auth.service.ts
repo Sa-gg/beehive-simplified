@@ -1,0 +1,211 @@
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { AuthRepository } from '../repositories/auth.repository';
+import { RegisterDTO, LoginDTO, UpdateUserDTO, UserDTO, AuthResponse } from '../types/auth.types';
+
+export class AuthService {
+  private authRepository: AuthRepository;
+  private jwtSecret: string;
+
+  constructor(authRepository: AuthRepository) {
+    this.authRepository = authRepository;
+    this.jwtSecret = process.env.JWT_SECRET || 'beehive-secret-key-change-in-production';
+  }
+
+  private excludePassword(user: any): UserDTO {
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword as UserDTO;
+  }
+
+  private generateToken(userId: string, email: string, role: string, name: string): string {
+    return jwt.sign(
+      { userId, email, role, name },
+      this.jwtSecret,
+      { expiresIn: '7d' }
+    );
+  }
+
+  async register(data: RegisterDTO): Promise<AuthResponse> {
+    // Validate phone number (required)
+    if (!data.phone) {
+      throw new Error('Phone number is required');
+    }
+    
+    const phoneRegex = /^[+]?[0-9\s-]{10,15}$/;
+    if (!phoneRegex.test(data.phone.replace(/\s/g, ''))) {
+      throw new Error('Invalid phone number format');
+    }
+
+    // Check if phone already exists
+    const existingByPhone = await this.authRepository.findByPhone(data.phone);
+    if (existingByPhone) {
+      throw new Error('Phone number already registered');
+    }
+
+    // If email is provided, validate and check for duplicates
+    if (data.email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email)) {
+        throw new Error('Invalid email format');
+      }
+      
+      const existingByEmail = await this.authRepository.findByEmail(data.email);
+      if (existingByEmail) {
+        throw new Error('Email already registered');
+      }
+    }
+
+    // Validate password length
+    if (data.password.length < 6) {
+      throw new Error('Password must be at least 6 characters long');
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    // Create user - use phone as email if email not provided
+    const user = await this.authRepository.create({
+      ...data,
+      email: data.email || `${data.phone.replace(/[^0-9]/g, '')}@phone.beehive`,
+      hashedPassword
+    });
+
+    // Generate card number for customers
+    if (user.role === 'CUSTOMER') {
+      const cardNumber = `BH${Date.now().toString().slice(-8)}`;
+      await this.authRepository.update(user.id, { cardNumber });
+      user.cardNumber = cardNumber;
+    }
+
+    // Generate token - use phone if no real email
+    const token = this.generateToken(user.id, user.email, user.role, user.name);
+
+    return {
+      user: this.excludePassword(user),
+      token
+    };
+  }
+
+  async login(data: LoginDTO): Promise<AuthResponse> {
+    // Find user by email or phone number
+    let user = await this.authRepository.findByEmail(data.email);
+    
+    // If not found by email, try finding by phone number
+    if (!user) {
+      user = await this.authRepository.findByPhone(data.email);
+    }
+    
+    if (!user) {
+      throw new Error('Invalid email/phone or password');
+    }
+
+    // Check if user is active
+    if (!user.isActive) {
+      throw new Error('Account is inactive. Please contact support.');
+    }
+
+    // Verify password
+    const isPasswordValid = await bcrypt.compare(data.password, user.password);
+    if (!isPasswordValid) {
+      throw new Error('Invalid email/phone or password');
+    }
+
+    // Update last login
+    await this.authRepository.updateLastLogin(user.id);
+
+    // Generate token
+    const token = this.generateToken(user.id, user.email, user.role, user.name);
+
+    return {
+      user: this.excludePassword(user),
+      token
+    };
+  }
+
+  async getUserById(id: string): Promise<UserDTO> {
+    const user = await this.authRepository.findById(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return this.excludePassword(user);
+  }
+
+  async getAllUsers(role?: string): Promise<UserDTO[]> {
+    const users = await this.authRepository.findAll(role);
+    return users.map(user => this.excludePassword(user));
+  }
+
+  async updateUser(id: string, data: UpdateUserDTO): Promise<UserDTO> {
+    // Check if user exists
+    await this.getUserById(id);
+
+    // If updating password, hash it
+    if (data.password) {
+      if (data.password.length < 6) {
+        throw new Error('Password must be at least 6 characters long');
+      }
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+
+    // If updating email, check if it's already taken
+    if (data.email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email)) {
+        throw new Error('Invalid email format');
+      }
+      
+      const existingUser = await this.authRepository.findByEmail(data.email);
+      if (existingUser && existingUser.id !== id) {
+        throw new Error('Email already in use');
+      }
+    }
+
+    const updatedUser = await this.authRepository.update(id, data);
+    return this.excludePassword(updatedUser);
+  }
+
+  async deleteUser(id: string): Promise<void> {
+    await this.getUserById(id);
+    await this.authRepository.delete(id);
+  }
+
+  verifyToken(token: string): any {
+    try {
+      return jwt.verify(token, this.jwtSecret);
+    } catch (error) {
+      throw new Error('Invalid or expired token');
+    }
+  }
+
+  // Validate manager PIN for authorization
+  // PIN format: For simplicity, we use the last 4-6 digits of the manager's phone number
+  // or a specially set PIN field. Here we'll check against password as a PIN for demo.
+  // In production, you'd have a separate managerPin field in the users table.
+  async validateManagerPin(pin: string): Promise<{ valid: boolean; manager?: { id: string; name: string } }> {
+    // Find all managers/admins
+    const managers = await this.authRepository.findAll('MANAGER');
+    const admins = await this.authRepository.findAll('ADMIN');
+    const allManagers = [...managers, ...admins];
+
+    // For demo purposes: PIN is the phone number's last 4 digits or '1234' as default
+    for (const manager of allManagers) {
+      // Check if PIN matches:
+      // 1. Last 4 digits of phone number
+      // 2. Or compare against a default PIN pattern based on name (for demo)
+      const phoneLast4 = manager.phone?.replace(/\D/g, '').slice(-4) || '';
+      const defaultPin = '1234'; // Fallback default manager PIN for testing
+      
+      if (pin === phoneLast4 || pin === defaultPin) {
+        return {
+          valid: true,
+          manager: {
+            id: manager.id,
+            name: manager.name
+          }
+        };
+      }
+    }
+
+    throw new Error('Invalid manager PIN');
+  }
+}

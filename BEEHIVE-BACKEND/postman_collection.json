@@ -1,0 +1,364 @@
+{
+  "info": {
+    "name": "BEEHIVE Menu Items API",
+    "description": "Complete API collection for BEEHIVE Restaurant Menu Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Menu Items",
+      "item": [
+        {
+          "name": "Get All Menu Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items"]
+            }
+          }
+        },
+        {
+          "name": "Get All Menu Items (Filtered)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items?category=PIZZA&available=true",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "PIZZA",
+                  "description": "Filter by category: PIZZA, APPETIZER, HOT_DRINKS, COLD_DRINKS, SMOOTHIE, PLATTER, SAVERS, VALUE_MEAL"
+                },
+                {
+                  "key": "available",
+                  "value": "true",
+                  "description": "Filter by availability"
+                },
+                {
+                  "key": "featured",
+                  "value": "true",
+                  "description": "Filter by featured status",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "burger",
+                  "description": "Search in name and description",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Menu Item by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "your-menu-item-id-here",
+                  "description": "Menu item UUID"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Menu Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bacon Pepperoni Pizza\",\n  \"category\": \"PIZZA\",\n  \"price\": 299,\n  \"cost\": 180,\n  \"image\": \"/uploads/menu-images/pizza.jpg\",\n  \"description\": \"Classic pizza with bacon and pepperoni toppings\",\n  \"available\": true,\n  \"featured\": true,\n  \"prepTime\": 15\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items"]
+            }
+          }
+        },
+        {
+          "name": "Update Menu Item",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Bacon Pepperoni Pizza\",\n  \"price\": 320,\n  \"cost\": 190,\n  \"description\": \"Updated description\",\n  \"prepTime\": 20\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "your-menu-item-id-here"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Menu Item",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "your-menu-item-id-here"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Toggle Availability",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items/:id/availability",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items", ":id", "availability"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "your-menu-item-id-here"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Toggle Featured",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items/:id/featured",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items", ":id", "featured"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "your-menu-item-id-here"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Bulk Update Availability",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\n    \"uuid1\",\n    \"uuid2\",\n    \"uuid3\"\n  ],\n  \"available\": false\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items/bulk/availability",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items", "bulk", "availability"]
+            }
+          }
+        },
+        {
+          "name": "Get Menu Items by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items/category/:category",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items", "category", ":category"],
+              "variable": [
+                {
+                  "key": "category",
+                  "value": "PIZZA",
+                  "description": "Category name: PIZZA, APPETIZER, HOT_DRINKS, COLD_DRINKS, SMOOTHIE, PLATTER, SAVERS, VALUE_MEAL"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Featured Menu Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items/featured",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items", "featured"]
+            }
+          }
+        },
+        {
+          "name": "Search Menu Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items/search?q=burger",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "burger",
+                  "description": "Search term"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Menu Items Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/menu-items/stats",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "menu-items", "stats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Image Upload",
+      "item": [
+        {
+          "name": "Upload Image from File",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": [],
+                  "description": "Select an image file (jpeg, jpg, png, gif, webp). Max 5MB"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/upload/image",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "upload", "image"]
+            }
+          }
+        },
+        {
+          "name": "Download Image from URL",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://example.com/pizza.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/upload/image-url",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "upload", "image-url"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Get API Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [""]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

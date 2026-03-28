@@ -1,0 +1,381 @@
+/**
+ * FULL Database Backup Script - Before Category Migration
+ * This script backs up ALL tables and their records before
+ * converting the category enum to a categories table.
+ * 
+ * Run with: npx tsx scripts/backup-before-category-migration.ts
+ */
+
+import { PrismaClient } from '../generated/prisma/client.js';
+import { PrismaPg } from '@prisma/adapter-pg';
+import pg from 'pg';
+import fs from 'fs';
+import path from 'path';
+import 'dotenv/config';
+
+const { Pool } = pg;
+
+const pool = new Pool({ 
+  connectionString: process.env.DATABASE_URL! 
+});
+
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
+
+async function main() {
+  console.log('🔄 Starting FULL DATABASE backup before category migration...\n');
+
+  // Create backups directory if it doesn't exist
+  const backupDir = path.join(process.cwd(), 'backups');
+  if (!fs.existsSync(backupDir)) {
+    fs.mkdirSync(backupDir, { recursive: true });
+  }
+
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const backupFile = path.join(backupDir, `full-database-backup-${timestamp}.json`);
+
+  try {
+    // ==================== BACKUP ALL TABLES ====================
+    
+    // 1. Users
+    console.log('📦 Backing up users...');
+    const users = await prisma.users.findMany();
+    console.log(`   Found ${users.length} users`);
+
+    // 2. Menu Items with all relations
+    console.log('📦 Backing up menu items...');
+    const menuItems = await prisma.menu_items.findMany({
+      include: {
+        menu_item_ingredients: true,
+        menu_item_mood_stats: true
+      }
+    });
+    console.log(`   Found ${menuItems.length} menu items`);
+
+    // 3. Get unique categories (for reference)
+    const uniqueCategories = [...new Set(menuItems.map(item => item.category))];
+    console.log(`   Found ${uniqueCategories.length} unique categories: ${uniqueCategories.join(', ')}`);
+
+    // 4. Inventory Items
+    console.log('📦 Backing up inventory items...');
+    const inventoryItems = await prisma.inventory_items.findMany();
+    console.log(`   Found ${inventoryItems.length} inventory items`);
+
+    // 5. Menu Item Ingredients (recipes)
+    console.log('📦 Backing up menu item ingredients (recipes)...');
+    const menuItemIngredients = await prisma.menu_item_ingredients.findMany();
+    console.log(`   Found ${menuItemIngredients.length} menu item ingredients`);
+
+    // 6. Orders
+    console.log('📦 Backing up orders...');
+    const orders = await prisma.orders.findMany({
+      include: {
+        order_items: true
+      }
+    });
+    console.log(`   Found ${orders.length} orders`);
+
+    // 7. Order Items
+    console.log('📦 Backing up order items...');
+    const orderItems = await prisma.order_items.findMany();
+    console.log(`   Found ${orderItems.length} order items`);
+
+    // 8. Expenses
+    console.log('📦 Backing up expenses...');
+    const expenses = await prisma.expenses.findMany();
+    console.log(`   Found ${expenses.length} expenses`);
+
+    // 9. Stock Transactions
+    console.log('📦 Backing up stock transactions...');
+    const stockTransactions = await prisma.stock_transactions.findMany();
+    console.log(`   Found ${stockTransactions.length} stock transactions`);
+
+    // 10. Mood Settings
+    console.log('📦 Backing up mood settings...');
+    const moodSettings = await prisma.mood_settings.findMany();
+    console.log(`   Found ${moodSettings.length} mood settings`);
+
+    // 11. Mood Feedback Config
+    console.log('📦 Backing up mood feedback config...');
+    const moodFeedbackConfig = await prisma.mood_feedback_config.findMany();
+    console.log(`   Found ${moodFeedbackConfig.length} mood feedback configs`);
+
+    // 12. Mood Order Stats
+    console.log('📦 Backing up mood order stats...');
+    const moodOrderStats = await prisma.mood_order_stats.findMany();
+    console.log(`   Found ${moodOrderStats.length} mood order stats`);
+
+    // 13. Menu Item Mood Stats
+    console.log('📦 Backing up menu item mood stats...');
+    const menuItemMoodStats = await prisma.menu_item_mood_stats.findMany();
+    console.log(`   Found ${menuItemMoodStats.length} menu item mood stats`);
+
+    // ==================== CREATE BACKUP OBJECT ====================
+    const backup = {
+      timestamp: new Date().toISOString(),
+      version: '2.0.0',
+      description: 'FULL DATABASE backup before category enum to table migration',
+      data: {
+        // Users (without sensitive data like passwords in plain text)
+        users: users.map(user => ({
+          id: user.id,
+          name: user.name,
+          pin: user.pin, // Keeping PIN for restore
+          role: user.role,
+          isActive: user.isActive,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt
+        })),
+        
+        // Categories extracted from menu items
+        categories: uniqueCategories.map((cat, index) => ({
+          name: cat,
+          displayName: cat.split('_').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          ).join(' '),
+          sortOrder: index,
+          isActive: true
+        })),
+        
+        // Menu Items
+        menuItems: menuItems.map(item => ({
+          id: item.id,
+          name: item.name,
+          category: item.category,
+          price: item.price,
+          cost: item.cost,
+          image: item.image,
+          description: item.description,
+          available: item.available,
+          featured: item.featured,
+          prepTime: item.prepTime,
+          nutrients: item.nutrients,
+          moodBenefits: item.moodBenefits,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt
+        })),
+        
+        // Inventory Items
+        inventoryItems: inventoryItems.map(item => ({
+          id: item.id,
+          name: item.name,
+          category: item.category,
+          quantity: item.quantity,
+          unit: item.unit,
+          minStock: item.minStock,
+          maxStock: item.maxStock,
+          cost: item.cost,
+          supplier: item.supplier,
+          status: item.status,
+          lastRestocked: item.lastRestocked,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt
+        })),
+        
+        // Menu Item Ingredients (Recipes)
+        menuItemIngredients: menuItemIngredients.map(ing => ({
+          id: ing.id,
+          menuItemId: ing.menuItemId,
+          inventoryItemId: ing.inventoryItemId,
+          quantityNeeded: ing.quantityNeeded,
+          unit: ing.unit,
+          createdAt: ing.createdAt,
+          updatedAt: ing.updatedAt
+        })),
+        
+        // Orders
+        orders: orders.map(order => ({
+          id: order.id,
+          orderNumber: order.orderNumber,
+          customerName: order.customerName,
+          totalAmount: order.totalAmount,
+          subtotal: order.subtotal,
+          tax: order.tax,
+          discountAmount: order.discountAmount,
+          deliveryFee: order.deliveryFee,
+          serviceFee: order.serviceFee,
+          cashReceived: order.cashReceived,
+          changeAmount: order.changeAmount,
+          status: order.status,
+          paymentStatus: order.paymentStatus,
+          paymentMethod: order.paymentMethod,
+          orderType: order.orderType,
+          tableNumber: order.tableNumber,
+          notes: order.notes,
+          createdBy: order.createdBy,
+          processedBy: order.processedBy,
+          authorizedBy: order.authorizedBy,
+          linkedOrderId: order.linkedOrderId,
+          selectedMood: order.selectedMood,
+          createdAt: order.createdAt,
+          updatedAt: order.updatedAt,
+          completedAt: order.completedAt,
+          paidAt: order.paidAt
+        })),
+        
+        // Order Items
+        orderItems: orderItems.map(item => ({
+          id: item.id,
+          orderId: item.orderId,
+          menuItemId: item.menuItemId,
+          quantity: item.quantity,
+          price: item.price,
+          subtotal: item.subtotal,
+          notes: item.notes,
+          createdAt: item.createdAt
+        })),
+        
+        // Expenses
+        expenses: expenses.map(expense => ({
+          id: expense.id,
+          description: expense.description,
+          amount: expense.amount,
+          category: expense.category,
+          frequency: expense.frequency,
+          date: expense.date,
+          notes: expense.notes,
+          createdAt: expense.createdAt,
+          updatedAt: expense.updatedAt
+        })),
+        
+        // Stock Transactions
+        stockTransactions: stockTransactions.map(txn => ({
+          id: txn.id,
+          inventoryItemId: txn.inventoryItemId,
+          type: txn.type,
+          quantity: txn.quantity,
+          reason: txn.reason,
+          notes: txn.notes,
+          orderId: txn.orderId,
+          performedBy: txn.performedBy,
+          createdAt: txn.createdAt
+        })),
+        
+        // Mood Settings
+        moodSettings: moodSettings.map(setting => ({
+          id: setting.id,
+          mood: setting.mood,
+          isEnabled: setting.isEnabled,
+          emoji: setting.emoji,
+          color: setting.color,
+          displayName: setting.displayName,
+          description: setting.description,
+          preferredCategories: setting.preferredCategories,
+          excludeCategories: setting.excludeCategories,
+          boostPercentage: setting.boostPercentage,
+          createdAt: setting.createdAt,
+          updatedAt: setting.updatedAt
+        })),
+        
+        // Mood Feedback Config
+        // Mood Feedback Config
+        moodFeedbackConfig: moodFeedbackConfig.map(config => ({
+          id: config.id,
+          feedbackEnabled: config.feedbackEnabled,
+          minimumOrdersForFeedback: config.minimumOrdersForFeedback,
+          feedbackPromptChance: config.feedbackPromptChance,
+          coldStartBoostEnabled: config.coldStartBoostEnabled,
+          coldStartBoostMultiplier: config.coldStartBoostMultiplier,
+          coldStartThreshold: config.coldStartThreshold,
+          explorationEnabled: config.explorationEnabled,
+          explorationBoostMax: config.explorationBoostMax,
+          morningStartHour: config.morningStartHour,
+          morningEndHour: config.morningEndHour,
+          afternoonStartHour: config.afternoonStartHour,
+          afternoonEndHour: config.afternoonEndHour,
+          eveningStartHour: config.eveningStartHour,
+          eveningEndHour: config.eveningEndHour,
+          morningCategories: config.morningCategories,
+          afternoonCategories: config.afternoonCategories,
+          eveningCategories: config.eveningCategories,
+          createdAt: config.createdAt,
+          updatedAt: config.updatedAt
+        })),
+        
+        // Mood Order Stats
+        moodOrderStats: moodOrderStats.map(stat => ({
+          id: stat.id,
+          mood: stat.mood,
+          totalOrders: stat.totalOrders,
+          positiveRatings: stat.positiveRatings,
+          negativeRatings: stat.negativeRatings,
+          lastOrderDate: stat.lastOrderDate,
+          createdAt: stat.createdAt,
+          updatedAt: stat.updatedAt
+        })),
+        
+        // Menu Item Mood Stats
+        menuItemMoodStats: menuItemMoodStats.map(stat => ({
+          id: stat.id,
+          menuItemId: stat.menuItemId,
+          mood: stat.mood,
+          timesOrdered: stat.timesOrdered,
+          timesExposed: stat.timesExposed,
+          positiveRatings: stat.positiveRatings,
+          negativeRatings: stat.negativeRatings,
+          lastOrderDate: stat.lastOrderDate,
+          createdAt: stat.createdAt,
+          updatedAt: stat.updatedAt
+        }))
+      },
+      statistics: {
+        totalUsers: users.length,
+        totalMenuItems: menuItems.length,
+        totalCategories: uniqueCategories.length,
+        totalInventoryItems: inventoryItems.length,
+        totalOrders: orders.length,
+        totalOrderItems: orderItems.length,
+        totalExpenses: expenses.length,
+        totalStockTransactions: stockTransactions.length,
+        totalMoodSettings: moodSettings.length,
+        totalMoodFeedbackConfigs: moodFeedbackConfig.length,
+        totalMoodOrderStats: moodOrderStats.length,
+        totalMenuItemMoodStats: menuItemMoodStats.length,
+        totalMenuItemIngredients: menuItemIngredients.length,
+        itemsByCategory: uniqueCategories.map(cat => ({
+          category: cat,
+          count: menuItems.filter(item => item.category === cat).length
+        }))
+      }
+    };
+
+    // 6. Write backup file
+    fs.writeFileSync(backupFile, JSON.stringify(backup, null, 2));
+    console.log(`\n✅ Backup saved to: ${backupFile}`);
+
+    // 7. Display summary
+    console.log('\n📊 FULL DATABASE Backup Summary:');
+    console.log('━'.repeat(60));
+    console.log(`   Users:                    ${backup.statistics.totalUsers}`);
+    console.log(`   Menu Items:               ${backup.statistics.totalMenuItems}`);
+    console.log(`   Categories:               ${backup.statistics.totalCategories}`);
+    console.log(`   Inventory Items:          ${backup.statistics.totalInventoryItems}`);
+    console.log(`   Menu Item Ingredients:    ${backup.statistics.totalMenuItemIngredients}`);
+    console.log(`   Orders:                   ${backup.statistics.totalOrders}`);
+    console.log(`   Order Items:              ${backup.statistics.totalOrderItems}`);
+    console.log(`   Expenses:                 ${backup.statistics.totalExpenses}`);
+    console.log(`   Stock Transactions:       ${backup.statistics.totalStockTransactions}`);
+    console.log(`   Mood Settings:            ${backup.statistics.totalMoodSettings}`);
+    console.log(`   Mood Feedback Configs:    ${backup.statistics.totalMoodFeedbackConfigs}`);
+    console.log(`   Mood Order Stats:         ${backup.statistics.totalMoodOrderStats}`);
+    console.log(`   Menu Item Mood Stats:     ${backup.statistics.totalMenuItemMoodStats}`);
+    console.log('━'.repeat(60));
+    console.log('\n   Items by Category:');
+    backup.statistics.itemsByCategory.forEach(({ category, count }) => {
+      console.log(`   • ${category}: ${count} items`);
+    });
+    console.log('━'.repeat(60));
+
+    console.log('\n✅ FULL DATABASE Backup completed successfully!');
+    console.log('   You can now safely proceed with the migration.');
+
+  } catch (error) {
+    console.error('❌ Error during backup:', error);
+    process.exit(1);
+  } finally {
+    await prisma.$disconnect();
+    await pool.end();
+  }
+}
+
+main();

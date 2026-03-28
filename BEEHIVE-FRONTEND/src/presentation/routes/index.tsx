@@ -1,0 +1,224 @@
+import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom'
+import { MainLayout } from '../components/layout/MainLayout'
+import { ProtectedRoute } from '../components/common/ProtectedRoute'
+
+// Lazy load pages for better performance
+import { lazy, Suspense } from 'react'
+import { Loader2 } from 'lucide-react'
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="text-center">
+      <Loader2 className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
+      <p className="text-gray-600">Loading...</p>
+    </div>
+  </div>
+)
+
+// Auth Pages
+const LoginPage = lazy(() => import('../pages/auth/LoginPage').then(m => ({ default: m.LoginPage })))
+
+// Admin Pages (Protected)
+const DashboardPage = lazy(() => import('../pages/admin/DashboardPage').then(m => ({ default: m.DashboardPage })))
+const POSPage = lazy(() => import('../pages/admin/POSPage').then(m => ({ default: m.POSPage })))
+const OrdersPage = lazy(() => import('../pages/admin/OrdersPage').then(m => ({ default: m.OrdersPage })))
+const InventoryPage = lazy(() => import('../pages/admin/InventoryPage').then(m => ({ default: m.InventoryPage })))
+const RecipesPage = lazy(() => import('../pages/admin/RecipesPage').then(m => ({ default: m.RecipesPage })))
+const SalesPage = lazy(() => import('../pages/admin/SalesPage').then(m => ({ default: m.SalesPage })))
+const ReportsPage = lazy(() => import('../pages/admin/ReportsPage').then(m => ({ default: m.ReportsPage })))
+const ExpensesPage = lazy(() => import('../pages/admin/ExpensesPage').then(m => ({ default: m.ExpensesPage })))
+const AccountsPage = lazy(() => import('../pages/admin/AccountsPage').then(m => ({ default: m.AccountsPage })))
+const ProductsPage = lazy(() => import('../pages/admin/ProductsPage').then(m => ({ default: m.ProductsPage })))
+const SettingsPage = lazy(() => import('../pages/admin/SettingsPage').then(m => ({ default: m.SettingsPage })))
+const StockTransactionsPage = lazy(() => import('../pages/admin/StockTransactionsPage').then(m => ({ default: m.StockTransactionsPage })))
+const LoyaltyPage = lazy(() => import('../pages/admin/LoyaltyPage').then(m => ({ default: m.LoyaltyPage })))
+
+// Error Pages
+const NotFoundPage = lazy(() => import('../pages/error/NotFoundPage').then(m => ({ default: m.NotFoundPage })))
+
+// Utility Pages (standalone, no layout)
+const QRConnectPage = lazy(() => import('../pages/QRConnectPage').then(m => ({ default: m.QRConnectPage })))
+
+/**
+ * Route Configuration
+ * Organized by feature areas following clean architecture
+ */
+export const routes: RouteObject[] = [
+  {
+    path: '/',
+    element: <MainLayout />,
+    children: [
+      // Root redirects to admin (which redirects to login if unauthenticated)
+      {
+        index: true,
+        element: <Navigate to="/admin" replace />,
+      },
+
+      // Auth Routes (both /login and /auth/login work)
+      {
+        path: 'login',
+        element: <Suspense fallback={<LoadingFallback />}><LoginPage /></Suspense>,
+      },
+      {
+        path: 'auth',
+        children: [
+          {
+            path: 'login',
+            element: <Suspense fallback={<LoadingFallback />}><LoginPage /></Suspense>,
+          },
+        ],
+      },
+
+      // Admin Routes (Protected - Permission-based access)
+      {
+        path: 'admin',
+        children: [
+          {
+            index: true,
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="viewDashboard">
+                  <DashboardPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+          {
+            path: 'pos',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="accessPOS">
+                  <POSPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+          {
+            path: 'orders',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="viewOrders">
+                  <OrdersPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+          {
+            path: 'inventory',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="viewInventory">
+                  <InventoryPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+          {
+            path: 'inventory/transactions',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="viewInventory">
+                  <StockTransactionsPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+          {
+            path: 'recipes',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="viewRecipes">
+                  <RecipesPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+          {
+            path: 'sales',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="viewSales">
+                  <SalesPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+          {
+            path: 'reports',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="viewReports">
+                  <ReportsPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+          {
+            path: 'expenses',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="viewExpenses">
+                  <ExpensesPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+          {
+            path: 'accounts',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="viewAccounts">
+                  <AccountsPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+          {
+            path: 'products',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="viewProducts">
+                  <ProductsPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+          {
+            path: 'settings',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="viewSettings">
+                  <SettingsPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+          {
+            path: 'loyalty',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <ProtectedRoute requiredPermission="manageOrders">
+                  <LoyaltyPage />
+                </ProtectedRoute>
+              </Suspense>
+            ),
+          },
+        ],
+      },
+
+      // Error Routes
+      {
+        path: '*',
+        element: <Suspense fallback={<LoadingFallback />}><NotFoundPage /></Suspense>,
+      },
+    ],
+  },
+  // Standalone utility pages (no layout wrapper)
+  {
+    path: '/qr-connect',
+    element: <Suspense fallback={<LoadingFallback />}><QRConnectPage /></Suspense>,
+  },
+]
+
+export const router = createBrowserRouter(routes)
