@@ -1,5 +1,5 @@
-import { ExpensesRepository } from '../repositories/expenses.repository'
-import { CreateExpenseDTO, UpdateExpenseDTO, ExpenseFilters, ExpenseSummary } from '../types/expenses.types'
+import { ExpensesRepository } from "../repositories/expenses.repository.js"
+import { CreateExpenseDTO, UpdateExpenseDTO, ExpenseFilters, ExpenseSummary } from "../types/expenses.types.js"
 
 export class ExpensesService {
   constructor(private repository: ExpensesRepository) {}

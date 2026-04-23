@@ -185,30 +185,10 @@ app.use((req, res, next) => {
 // Serve static files from public directory
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
-// Routes
-app.get('/', (req: Request, res: Response) => {
-  res.json({ 
-    message: 'Welcome to BEEHIVE API',
-    version: '1.0.0',
-    endpoints: {
-      auth: '/api/auth',
-      customers: '/api/customers',
-      dashboard: '/api/dashboard',
-      expenses: '/api/expenses',
-      menuItems: '/api/menu-items',
-      upload: '/api/upload',
-      orders: '/api/orders',
-      inventory: '/api/inventory',
-      sales: '/api/sales',
-      stockTransactions: '/api/stock-transactions',
-      recipes: '/api/recipes',
-      settings: '/api/settings',
-      categories: '/api/categories',
-      addons: '/api/addons'
-    }
-  });
-});
+// Serve built frontend static files
+app.use(express.static(path.join(__dirname, 'public/dist')));
 
+// Routes
 // Auth API Routes (using layered architecture)
 app.use('/api/auth', createAuthRouter(authController));
 
@@ -250,6 +230,11 @@ app.use('/api/categories', createCategoryRoutes(prisma));
 
 // Add-ons & Variants API Routes
 app.use('/api/addons', createAddonRoutes(prisma));
+
+// SPA fallback - React Router handles all non-API routes
+app.get('/{*path}', (_req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, 'public/dist', 'index.html'));
+});
 
 // Start server
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;

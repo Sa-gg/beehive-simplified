@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { CustomersController } from '../controllers/customers.controller'
+import { CustomersController } from "../controllers/customers.controller.js"
 
 export const createCustomersRoutes = (customersController: CustomersController) => {
   const router = Router()

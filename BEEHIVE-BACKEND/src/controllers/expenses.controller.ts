@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { ExpensesService } from '../services/expenses.service'
-import { CreateExpenseDTO, UpdateExpenseDTO } from '../types/expenses.types'
+import { ExpensesService } from "../services/expenses.service.js"
+import { CreateExpenseDTO, UpdateExpenseDTO } from "../types/expenses.types.js"
 
 export class ExpensesController {
   constructor(private service: ExpensesService) {}

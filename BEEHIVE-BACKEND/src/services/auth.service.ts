@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { AuthRepository } from '../repositories/auth.repository';
-import { RegisterDTO, LoginDTO, UpdateUserDTO, UserDTO, AuthResponse } from '../types/auth.types';
+import { AuthRepository } from "../repositories/auth.repository.js";
+import { RegisterDTO, LoginDTO, UpdateUserDTO, UserDTO, AuthResponse } from "../types/auth.types.js";
 
 export class AuthService {
   private authRepository: AuthRepository;

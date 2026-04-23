@@ -1,5 +1,5 @@
-import { CustomersRepository } from '../repositories/customers.repository'
-import { Customer, CreateCustomerDTO, UpdateCustomerDTO, CustomerFilters, CustomerStats } from '../types/customers.types'
+import { CustomersRepository } from "../repositories/customers.repository.js"
+import { Customer, CreateCustomerDTO, UpdateCustomerDTO, CustomerFilters, CustomerStats } from "../types/customers.types.js"
 
 export class CustomersService {
   constructor(private customersRepository: CustomersRepository) {}

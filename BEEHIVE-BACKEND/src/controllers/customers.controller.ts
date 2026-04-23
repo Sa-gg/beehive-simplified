@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { CustomersService } from '../services/customers.service'
-import { CreateCustomerDTO, UpdateCustomerDTO, CustomerFilters } from '../types/customers.types'
+import { CustomersService } from "../services/customers.service.js"
+import { CreateCustomerDTO, UpdateCustomerDTO, CustomerFilters } from "../types/customers.types.js"
 
 export class CustomersController {
   constructor(private customersService: CustomersService) {}

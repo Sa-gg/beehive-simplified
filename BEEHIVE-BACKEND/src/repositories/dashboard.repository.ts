@@ -1,5 +1,5 @@
 import { PrismaClient } from '../../generated/prisma/client.js';
-import { DashboardStats } from '../types/dashboard.types';
+import { DashboardStats } from "../types/dashboard.types.js";
 
 export class DashboardRepository {
   constructor(private prisma: PrismaClient) {}

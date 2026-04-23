@@ -1,5 +1,5 @@
-import { DashboardRepository } from '../repositories/dashboard.repository';
-import { DashboardResponse } from '../types/dashboard.types';
+import { DashboardRepository } from "../repositories/dashboard.repository.js";
+import { DashboardResponse } from "../types/dashboard.types.js";
 
 export class DashboardService {
   constructor(private dashboardRepository: DashboardRepository) {}

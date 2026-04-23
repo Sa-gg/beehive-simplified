@@ -60,12 +60,13 @@ app.get('/', (req: Request, res: Response) => {
 app.use(express.static(path.join(__dirname, 'public/dist')));
 
 // SPA fallback — React Router handles all non-API routes
-app.get('*', (_req: Request, res: Response) => {
+app.get('/{*path}', (_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, 'public/dist', 'index.html'));
 });
 ```
 
 > **Why replace, not just add**: The existing `app.get('/')` would intercept all requests to `http://localhost:3000` and return JSON instead of the React app. The `express.static` middleware handles `/` by automatically serving `index.html` from the `public/dist/` folder.
+> **Express 5 note**: Use `/{*path}` (not `*`) for catch-all matching with current `path-to-regexp` behavior.
 
 #### 1b. Create frontend production env
 

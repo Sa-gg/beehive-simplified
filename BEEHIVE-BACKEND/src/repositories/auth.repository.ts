@@ -1,5 +1,5 @@
 import { PrismaClient } from '../../generated/prisma/client.js';
-import { RegisterDTO, UpdateUserDTO, UserDTO } from '../types/auth.types';
+import { RegisterDTO, UpdateUserDTO, UserDTO } from "../types/auth.types.js";
 
 export class AuthRepository {
   private prisma: PrismaClient;
