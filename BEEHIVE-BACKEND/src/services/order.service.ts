@@ -221,19 +221,12 @@ export class OrderService {
           notes: `Stock replenished - voided order ${order.orderNumber}: ${reason}`,
         });
 
-        console.log(
-          `✓ Replenished ${requirement.totalRequired} ${requirement.unit} of ${requirement.inventoryItemName} for voided order ${order.orderNumber}`
-        );
       } catch (error: any) {
         console.error(
           `✗ Failed to replenish ${requirement.inventoryItemName}: ${error.message}`
         );
       }
     }
-
-    console.log(
-      `Stock replenishment completed for voided order ${order.orderNumber}`
-    );
   }
 
   /**
@@ -246,7 +239,6 @@ export class OrderService {
     // Check if inventory has already been deducted for this order (idempotency)
     const alreadyProcessed = await stockTransactionService.isReferenceProcessed(orderId);
     if (alreadyProcessed) {
-      console.log(`Inventory already deducted for order ${orderId}, skipping...`);
       return;
     }
 
@@ -355,16 +347,6 @@ export class OrderService {
           quantity: requirement.totalRequired,
           discrepancy: result.discrepancy,
         });
-
-        if (result.discrepancy) {
-          console.log(
-            `⚠ Deducted ${requirement.totalRequired} ${requirement.unit} of ${requirement.inventoryItemName} for order ${order.orderNumber} (DISCREPANCY: ${result.discrepancy} ${requirement.unit} used beyond recorded stock)`
-          );
-        } else {
-          console.log(
-            `✓ Deducted ${requirement.totalRequired} ${requirement.unit} of ${requirement.inventoryItemName} for order ${order.orderNumber}`
-          );
-        }
       } catch (error: any) {
         deductionResults.push({
           success: false,
@@ -378,14 +360,6 @@ export class OrderService {
         );
       }
     }
-
-    // Log summary
-    const successCount = deductionResults.filter((r) => r.success).length;
-    const failCount = deductionResults.filter((r) => !r.success).length;
-
-    console.log(
-      `Inventory deduction summary for order ${order.orderNumber}: ${successCount} successful, ${failCount} failed`
-    );
 
     // If some deductions failed, you may want to handle this (e.g., notify admin)
     if (failCount > 0) {

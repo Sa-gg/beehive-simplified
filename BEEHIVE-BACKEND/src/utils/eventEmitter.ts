@@ -13,26 +13,19 @@ class OrderEventEmitter {
   // Add a new SSE client
   addClient(client: SSEClient) {
     this.clients.push(client);
-    console.log(`📡 SSE Client connected: ${client.type} (${client.id})`);
-    console.log(`   Total clients: ${this.clients.length}`);
   }
 
   // Remove a disconnected client
   removeClient(id: string) {
     const index = this.clients.findIndex(c => c.id === id);
     if (index !== -1) {
-      const client = this.clients[index];
       this.clients.splice(index, 1);
-      console.log(`📡 SSE Client disconnected: ${client.type} (${id})`);
-      console.log(`   Total clients: ${this.clients.length}`);
     }
   }
 
   // Broadcast new order to all cashier clients
   broadcastNewOrder(order: any) {
     const cashierClients = this.clients.filter(c => c.type === 'cashier');
-    console.log(`📢 Broadcasting NEW_ORDER to ${cashierClients.length} cashier(s)`);
-    
     cashierClients.forEach(client => {
       this.sendEvent(client.response, 'NEW_ORDER', order);
     });
@@ -42,8 +35,6 @@ class OrderEventEmitter {
   broadcastOrderUpdate(order: any) {
     // Notify all cashiers
     const cashierClients = this.clients.filter(c => c.type === 'cashier');
-    console.log(`📢 Broadcasting ORDER_UPDATE to ${cashierClients.length} cashier(s)`);
-    
     cashierClients.forEach(client => {
       this.sendEvent(client.response, 'ORDER_UPDATE', order);
     });
@@ -53,7 +44,6 @@ class OrderEventEmitter {
       c => c.type === 'customer' && 
       (c.customerId === order.customerName || c.customerId === order.id)
     );
-    console.log(`📢 Broadcasting ORDER_UPDATE to ${customerClients.length} customer(s)`);
     
     customerClients.forEach(client => {
       this.sendEvent(client.response, 'ORDER_UPDATE', order);

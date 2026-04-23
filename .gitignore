@@ -1,0 +1,10 @@
+# Documentation (dev-only, do not deploy to client)
+docs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
