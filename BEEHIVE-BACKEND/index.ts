@@ -167,7 +167,7 @@ const dashboardService = new DashboardService(dashboardRepository);
 const dashboardController = new DashboardController(dashboardService);
 
 const app = express();
-const frontendDistPath = path.join(__dirname, 'public/dist');
+const frontendDistPath = path.join(__dirname, '../public/dist');
 const frontendIndexPath = path.join(frontendDistPath, 'index.html');
 
 // Middleware
@@ -186,7 +186,7 @@ app.use((req, res, next) => {
 });
 
 // Serve static files from public directory
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // Serve built frontend static files only when a built bundle exists
 if (fs.existsSync(frontendIndexPath)) {
