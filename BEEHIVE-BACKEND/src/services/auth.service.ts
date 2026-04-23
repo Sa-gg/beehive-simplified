@@ -87,12 +87,25 @@ export class AuthService {
   }
 
   async login(data: LoginDTO): Promise<AuthResponse> {
-    // Find user by email or phone number
-    let user = await this.authRepository.findByEmail(data.email);
-    
-    // If not found by email, try finding by phone number
-    if (!user) {
-      user = await this.authRepository.findByPhone(data.email);
+    const identifier = (data.email || data.phone || data.username || '').trim();
+    const password = data.password;
+
+    if (!identifier || !password) {
+      throw new Error('Email/phone and password are required');
+    }
+
+    // Support current and legacy clients that send email, phone, or username.
+    let user = null;
+    if (identifier.includes('@')) {
+      user = await this.authRepository.findByEmail(identifier);
+      if (!user) {
+        user = await this.authRepository.findByPhone(identifier);
+      }
+    } else {
+      user = await this.authRepository.findByPhone(identifier);
+      if (!user) {
+        user = await this.authRepository.findByEmail(identifier);
+      }
     }
     
     if (!user) {
@@ -105,7 +118,7 @@ export class AuthService {
     }
 
     // Verify password
-    const isPasswordValid = await bcrypt.compare(data.password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new Error('Invalid email/phone or password');
     }

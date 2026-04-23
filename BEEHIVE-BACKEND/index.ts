@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import { PrismaClient } from './generated/prisma/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -166,6 +167,8 @@ const dashboardService = new DashboardService(dashboardRepository);
 const dashboardController = new DashboardController(dashboardService);
 
 const app = express();
+const frontendDistPath = path.join(__dirname, 'public/dist');
+const frontendIndexPath = path.join(frontendDistPath, 'index.html');
 
 // Middleware
 app.use(express.json());
@@ -185,8 +188,10 @@ app.use((req, res, next) => {
 // Serve static files from public directory
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
-// Serve built frontend static files
-app.use(express.static(path.join(__dirname, 'public/dist')));
+// Serve built frontend static files only when a built bundle exists
+if (fs.existsSync(frontendIndexPath)) {
+  app.use(express.static(frontendDistPath));
+}
 
 // Routes
 // Auth API Routes (using layered architecture)
@@ -232,9 +237,15 @@ app.use('/api/categories', createCategoryRoutes(prisma));
 app.use('/api/addons', createAddonRoutes(prisma));
 
 // SPA fallback - React Router handles all non-API routes
-app.get('/{*path}', (_req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, 'public/dist', 'index.html'));
-});
+if (fs.existsSync(frontendIndexPath)) {
+  app.get('/{*path}', (req: Request, res: Response, next) => {
+    if (req.path.startsWith('/api/')) {
+      return next();
+    }
+
+    res.sendFile(frontendIndexPath);
+  });
+}
 
 // Start server
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;

@@ -25,6 +25,10 @@ export class AuthRepository {
   }
 
   async findByEmail(email: string) {
+    if (!email || !email.trim()) {
+      return null;
+    }
+
     return this.prisma.users.findUnique({
       where: { email }
     });
