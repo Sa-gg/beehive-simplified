@@ -42,19 +42,30 @@ No separate Vite dev server. No frontend process. One Node.js server does everyt
 
 #### 1a. Serve built frontend from Express
 
-At the **very end** of index.ts, after all `app.use('/api/...')` calls and before `app.listen(...)`:
+Open `BEEHIVE-BACKEND/index.ts` and find this block around **line 189** (the JSON welcome route):
 
 ```typescript
-// Serve frontend static files (production)
+app.get('/', (req: Request, res: Response) => {
+  res.json({ 
+    message: 'Welcome to BEEHIVE API',
+    ...
+  });
+});
+```
+
+**Replace it entirely** with the static file server + SPA fallback:
+
+```typescript
+// Serve built frontend static files
 app.use(express.static(path.join(__dirname, 'public/dist')));
 
-// Catch-all: SPA fallback for React Router
+// SPA fallback — React Router handles all non-API routes
 app.get('*', (_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, 'public/dist', 'index.html'));
 });
 ```
 
-> **Why after all routes**: Express processes routes in order — API routes hit first, the catch-all only fires for non-API requests.
+> **Why replace, not just add**: The existing `app.get('/')` would intercept all requests to `http://localhost:3000` and return JSON instead of the React app. The `express.static` middleware handles `/` by automatically serving `index.html` from the `public/dist/` folder.
 
 #### 1b. Create frontend production env
 
@@ -144,18 +155,24 @@ echo.
 
 cd /d "%~dp0BEEHIVE-BACKEND"
 
-echo [1/3] Checking Node.js...
+echo [1/4] Checking Node.js...
 node --version || (echo ERROR: Node.js is not installed. & pause & exit /b 1)
 
-echo [2/3] Installing production dependencies...
-call npm ci --omit=dev
+echo [2/4] Installing dependencies...
+call npm install
 if errorlevel 1 (
     echo ERROR: npm install failed.
     pause & exit /b 1
 )
 
-echo [3/3] Running database migrations...
-set DATABASE_URL=postgresql://postgres:CHOSEN_PASSWORD@localhost:5432/beehive?schema=public
+echo [3/4] Generating Prisma client...
+call npx prisma generate
+if errorlevel 1 (
+    echo ERROR: Prisma generate failed.
+    pause & exit /b 1
+)
+
+echo [4/4] Running database migrations...
 call npx prisma migrate deploy
 if errorlevel 1 (
     echo ERROR: Migration failed. Is PostgreSQL running?
@@ -164,12 +181,15 @@ if errorlevel 1 (
 
 echo.
 echo ============================================
-echo  Setup complete! Run start.bat to launch.
+echo  Setup complete!
+echo.
+echo  Optional: seed default menu and accounts:
+echo    npx tsx prisma/seed.ts
 echo ============================================
 pause
 ```
 
-> **Seeding**: If the client's database is empty (fresh install), also run `npx tsx prisma/seed.ts` to load your menu data. For that you need `tsx` available — either install all deps (`npm install` instead of `npm ci --omit=dev`) for setup only, then revert to production deps.
+> **Seeding**: Run `npx tsx prisma/seed.ts` in the `BEEHIVE-BACKEND/` folder after setup to load the default menu, categories, and staff accounts. This requires the full `npm install` (already done above — `tsx` is a dev dependency). Credentials will be printed when the seed completes.
 
 ---
 
