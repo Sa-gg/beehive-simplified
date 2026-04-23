@@ -73,11 +73,11 @@ app.get('/{*path}', (_req: Request, res: Response) => {
 Create `BEEHIVE-FRONTEND/.env.production`:
 
 ```env
-VITE_API_URL=http://localhost:3000/api
+VITE_API_URL=http://localhost:3000
 VITE_APP_NAME=BEEHIVE
 ```
 
-> **QR code / phone access**: If customers scan QR codes from their phones (ordering from their own devices on the same WiFi), change this to the server's **LAN IP** (e.g., `http://192.168.1.10:3000/api`). Set a **static IP** on the client laptop's WiFi adapter so this never changes.
+> **QR code / phone access**: If customers scan QR codes from their phones (ordering from their own devices on the same WiFi), change this to the server's **LAN IP** (e.g., `http://192.168.1.10:3000`). Set a **static IP** on the client laptop's WiFi adapter so this never changes.
 
 #### 1c. Build the frontend
 
