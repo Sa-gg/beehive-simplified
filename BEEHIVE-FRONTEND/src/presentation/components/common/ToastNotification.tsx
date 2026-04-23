@@ -66,7 +66,7 @@ const ToastItem = ({ toast, onDismiss }: ToastProps) => {
       className={`flex items-start gap-3 p-4 rounded-xl border shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-[1.02] ${bgColors[toast.type]}`}
       onClick={handleClick}
     >
-      <div className="flex-shrink-0 mt-0.5">{icons[toast.type]}</div>
+      <div className="shrink-0 mt-0.5">{icons[toast.type]}</div>
       <div className="flex-1 min-w-0">
         <p className={`text-sm font-semibold ${textColors[toast.type]}`}>{toast.title}</p>
         {toast.message && (
@@ -81,7 +81,7 @@ const ToastItem = ({ toast, onDismiss }: ToastProps) => {
           e.stopPropagation()
           onDismiss(toast.id)
         }}
-        className="flex-shrink-0 p-1 rounded-full hover:bg-black/5 transition-colors"
+        className="shrink-0 p-1 rounded-full hover:bg-black/5 transition-colors"
       >
         <X className="h-4 w-4 opacity-50" />
       </button>

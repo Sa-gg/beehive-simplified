@@ -32,7 +32,7 @@ export const ImageViewer = ({ src, alt = 'Image', onClose }: ImageViewerProps) =
   }
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center">
+    <div className="fixed inset-0 z-100 bg-black/90 flex items-center justify-center">
       {/* Controls */}
       <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
         <button

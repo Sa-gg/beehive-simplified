@@ -493,7 +493,7 @@ export const StockTransactionsPage = () => {
             ? 'grid-cols-2 lg:grid-cols-4' 
             : 'grid-cols-3'
         }`}>
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl shadow-sm p-5 border border-green-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-green-50 to-emerald-50 rounded-2xl shadow-sm p-5 border border-green-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-3">
               <div className="p-3 bg-green-100 rounded-xl group-hover:scale-110 transition-transform">
                 <ArrowUpRight className="h-5 w-5 text-green-600" />
@@ -503,7 +503,7 @@ export const StockTransactionsPage = () => {
             <p className="text-2xl lg:text-3xl font-bold text-green-700">+{stats.totalIn.toFixed(2)}</p>
             <p className="text-xs text-gray-400 mt-2">total incoming</p>
           </div>
-          <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl shadow-sm p-5 border border-red-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-red-50 to-rose-50 rounded-2xl shadow-sm p-5 border border-red-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-3">
               <div className="p-3 bg-red-100 rounded-xl group-hover:scale-110 transition-transform">
                 <ArrowDownRight className="h-5 w-5 text-red-600" />
@@ -518,8 +518,8 @@ export const StockTransactionsPage = () => {
             <div 
               className={`rounded-2xl shadow-sm p-5 border cursor-pointer transition-all duration-300 group ${
                 filterStatus === 'DISCREPANCY'
-                  ? 'bg-gradient-to-br from-purple-100 to-violet-100 border-purple-300 ring-2 ring-purple-200'
-                  : 'bg-gradient-to-br from-purple-50 to-violet-50 border-purple-100 hover:shadow-lg'
+                  ? 'bg-linear-to-br from-purple-100 to-violet-100 border-purple-300 ring-2 ring-purple-200'
+                  : 'bg-linear-to-br from-purple-50 to-violet-50 border-purple-100 hover:shadow-lg'
               }`}
               onClick={() => setFilterStatus(filterStatus === 'DISCREPANCY' ? 'all' : 'DISCREPANCY')}
             >
@@ -536,7 +536,7 @@ export const StockTransactionsPage = () => {
               <p className="text-xs text-gray-400 mt-2">click to filter</p>
             </div>
           )}
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm p-5 border border-blue-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm p-5 border border-blue-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-3">
               <div className="p-3 bg-blue-100 rounded-xl group-hover:scale-110 transition-transform">
                 <Package className="h-5 w-5 text-blue-600" />
@@ -552,7 +552,7 @@ export const StockTransactionsPage = () => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
           <div className="flex flex-wrap items-center gap-3">
             {/* Search */}
-            <div className="relative flex-1 min-w-[200px]">
+            <div className="relative flex-1 min-w-50">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input
                 type="text"
@@ -747,7 +747,7 @@ export const StockTransactionsPage = () => {
                               )}
                             </td>
                             <td className="px-4 py-4">
-                              <div className="max-w-[120px]">
+                              <div className="max-w-30">
                                 <p 
                                   className="text-sm text-gray-600 truncate"
                                   title={tx.notes || '-'}
@@ -825,7 +825,7 @@ export const StockTransactionsPage = () => {
                           variant={currentPage === pageNum ? 'default' : 'outline'}
                           size="sm"
                           onClick={() => handlePageChange(pageNum)}
-                          className="min-w-[36px]"
+                          className="min-w-9"
                           style={currentPage === pageNum ? { backgroundColor: '#F9C900', color: '#000000' } : {}}
                         >
                           {pageNum}
@@ -888,7 +888,7 @@ export const StockTransactionsPage = () => {
                 {/* Success Message */}
                 {successMessage && (
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start gap-3">
-                    <Check className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
                     <p className="text-sm font-medium text-green-800">{successMessage}</p>
                   </div>
                 )}
@@ -896,7 +896,7 @@ export const StockTransactionsPage = () => {
                 {/* Status Banner */}
                 {selectedTransaction.status === 'DISCREPANCY' && (
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-                    <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                    <AlertTriangle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
                     <div>
                       <p className="font-medium text-red-800">Stock Discrepancy Detected</p>
                       <p className="text-sm text-red-600 mt-1">

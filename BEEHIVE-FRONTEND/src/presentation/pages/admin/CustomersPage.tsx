@@ -539,7 +539,7 @@ export const CustomersPage = () => {
                       variant={currentPage === pageNum ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => handlePageChange(pageNum)}
-                      className="min-w-[36px]"
+                      className="min-w-9"
                       style={currentPage === pageNum ? { backgroundColor: '#F9C900', color: '#000000' } : {}}
                     >
                       {pageNum}
@@ -566,7 +566,7 @@ export const CustomersPage = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
-            <div className="sticky top-0 bg-gradient-to-r from-amber-50 to-white border-b border-gray-100 px-6 py-5 flex items-center justify-between rounded-t-2xl">
+            <div className="sticky top-0 bg-linear-to-r from-amber-50 to-white border-b border-gray-100 px-6 py-5 flex items-center justify-between rounded-t-2xl">
               <div>
                 <h2 className="text-xl font-bold text-gray-900">
                   {editingCustomer ? 'Edit Customer' : 'Add New Customer'}

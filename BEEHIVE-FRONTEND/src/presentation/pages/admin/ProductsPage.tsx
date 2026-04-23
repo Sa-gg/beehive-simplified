@@ -528,7 +528,7 @@ export const ProductsPage = () => {
 
         {/* Statistics Cards - Updated to match InventoryPage design */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6">
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm p-5 border border-blue-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm p-5 border border-blue-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-3">
               <div className="p-3 bg-blue-100 rounded-xl group-hover:scale-110 transition-transform">
                 <Package className="h-5 w-5 text-blue-600" />
@@ -543,8 +543,8 @@ export const ProductsPage = () => {
           <div 
             className={`rounded-2xl shadow-sm p-5 border cursor-pointer transition-all duration-300 group ${
               stockFilter === 'in-stock' 
-                ? 'bg-gradient-to-br from-green-100 to-emerald-100 border-green-300 ring-2 ring-green-200' 
-                : 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-100 hover:shadow-lg'
+                ? 'bg-linear-to-br from-green-100 to-emerald-100 border-green-300 ring-2 ring-green-200' 
+                : 'bg-linear-to-br from-green-50 to-emerald-50 border-green-100 hover:shadow-lg'
             }`}
             onClick={() => setStockFilter(stockFilter === 'in-stock' ? 'all' : 'in-stock')}
           >
@@ -562,8 +562,8 @@ export const ProductsPage = () => {
           <div 
             className={`rounded-2xl shadow-sm p-5 border cursor-pointer transition-all duration-300 group ${
               stockFilter === 'out-of-stock' 
-                ? 'bg-gradient-to-br from-red-100 to-rose-100 border-red-300 ring-2 ring-red-200' 
-                : 'bg-gradient-to-br from-red-50 to-rose-50 border-red-100 hover:shadow-lg'
+                ? 'bg-linear-to-br from-red-100 to-rose-100 border-red-300 ring-2 ring-red-200' 
+                : 'bg-linear-to-br from-red-50 to-rose-50 border-red-100 hover:shadow-lg'
             }`}
             onClick={() => setStockFilter(stockFilter === 'out-of-stock' ? 'all' : 'out-of-stock')}
           >
@@ -581,10 +581,10 @@ export const ProductsPage = () => {
           <div 
             className={`rounded-2xl shadow-sm p-5 border cursor-pointer transition-all duration-300 group relative ${
               stockFilter === 'needs-attention' 
-                ? 'bg-gradient-to-br from-amber-100 to-yellow-100 border-amber-400 ring-2 ring-amber-300' 
+                ? 'bg-linear-to-br from-amber-100 to-yellow-100 border-amber-400 ring-2 ring-amber-300' 
                 : needsAttentionProducts > 0
-                  ? 'bg-gradient-to-br from-amber-50 to-yellow-50 border-amber-200 hover:shadow-lg animate-pulse'
-                  : 'bg-gradient-to-br from-amber-50 to-yellow-50 border-amber-100 hover:shadow-lg'
+                  ? 'bg-linear-to-br from-amber-50 to-yellow-50 border-amber-200 hover:shadow-lg animate-pulse'
+                  : 'bg-linear-to-br from-amber-50 to-yellow-50 border-amber-100 hover:shadow-lg'
             }`}
             onClick={() => setStockFilter(stockFilter === 'needs-attention' ? 'all' : 'needs-attention')}
           >
@@ -607,8 +607,8 @@ export const ProductsPage = () => {
           <div 
             className={`rounded-2xl shadow-sm p-5 border cursor-pointer transition-all duration-300 group ${
               availabilityFilter === 'available' 
-                ? 'bg-gradient-to-br from-amber-100 to-orange-100 border-amber-300 ring-2 ring-amber-200' 
-                : 'bg-gradient-to-br from-amber-50 to-orange-50 border-amber-100 hover:shadow-lg'
+                ? 'bg-linear-to-br from-amber-100 to-orange-100 border-amber-300 ring-2 ring-amber-200' 
+                : 'bg-linear-to-br from-amber-50 to-orange-50 border-amber-100 hover:shadow-lg'
             }`}
             onClick={() => setAvailabilityFilter(availabilityFilter === 'available' ? 'all' : 'available')}
           >
@@ -644,7 +644,7 @@ export const ProductsPage = () => {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white min-w-[140px]"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white min-w-35"
               >
                 <option value="all">All Categories</option>
                 {categories.filter(cat => cat.isActive).map(cat => (
@@ -658,7 +658,7 @@ export const ProductsPage = () => {
               <select
                 value={itemTypeFilter}
                 onChange={(e) => setItemTypeFilter(e.target.value as 'all' | 'BASE' | 'ADDON' | 'DRINK')}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white min-w-[120px]"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white min-w-30"
               >
                 <option value="all">All Types</option>
                 <option value="BASE">Base Items</option>
@@ -846,7 +846,7 @@ export const ProductsPage = () => {
                 </div>
                 <div className="relative" ref={dropdownRef}>
                   <div 
-                    className={`flex items-center h-8 px-2.5 text-sm border rounded-md bg-white cursor-pointer transition-colors min-w-[180px] ${
+                    className={`flex items-center h-8 px-2.5 text-sm border rounded-md bg-white cursor-pointer transition-colors min-w-45 ${
                       ingredientDropdownOpen ? 'border-amber-500 ring-2 ring-amber-200' : 'border-gray-300 hover:border-gray-400'
                     }`}
                     onClick={() => setIngredientDropdownOpen(!ingredientDropdownOpen)}
@@ -861,7 +861,7 @@ export const ProductsPage = () => {
                           if (!item) return 'Select...'
                           return (
                             <span className="flex items-center gap-1.5">
-                              <span className={`inline-block w-2 h-2 rounded-full flex-shrink-0 ${
+                              <span className={`inline-block w-2 h-2 rounded-full shrink-0 ${
                                 item.status === 'OUT_OF_STOCK' ? 'bg-red-500' : 
                                 item.status === 'LOW_STOCK' ? 'bg-yellow-500' : 'bg-green-500'
                               }`} />
@@ -871,12 +871,12 @@ export const ProductsPage = () => {
                         })()
                       ) : 'Select ingredient...'}
                     </span>
-                    <ChevronDown className={`h-3.5 w-3.5 ml-1 text-gray-400 flex-shrink-0 transition-transform ${ingredientDropdownOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`h-3.5 w-3.5 ml-1 text-gray-400 shrink-0 transition-transform ${ingredientDropdownOpen ? 'rotate-180' : ''}`} />
                   </div>
                   
                   {/* Dropdown panel */}
                   {ingredientDropdownOpen && (
-                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-[300px] flex flex-col w-[280px]">
+                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-75 flex flex-col w-70">
                       {/* Search and filter inside dropdown */}
                       <div className="p-2 border-b border-gray-100 space-y-2 sticky top-0 bg-white">
                         <div className="relative">
@@ -1289,7 +1289,7 @@ export const ProductsPage = () => {
                         )}
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-3">
-                            <div className="h-12 w-12 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
+                            <div className="h-12 w-12 rounded-lg bg-gray-100 overflow-hidden shrink-0">
                               {product.image ? (
                                 <img src={getImageUrl(product.image) || ''} alt={product.name} className="h-full w-full object-cover" />
                               ) : (

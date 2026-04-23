@@ -406,7 +406,7 @@ export const ExpensesPage = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-linear-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
               Expenses & Overhead
             </h1>
             <p className="text-gray-500 mt-1">Track and manage all operational expenses</p>
@@ -434,7 +434,7 @@ export const ExpensesPage = () => {
         {/* Summary Stats - Modern Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Total Monthly */}
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 border border-amber-100 hover:shadow-lg transition-all group">
+          <div className="bg-linear-to-br from-amber-50 to-orange-50 rounded-2xl p-5 border border-amber-100 hover:shadow-lg transition-all group">
             <div className="flex items-center justify-between mb-3">
               <div className="p-2.5 bg-amber-100 rounded-xl group-hover:scale-110 transition-transform">
                 <DollarSign className="h-5 w-5 text-amber-600" />
@@ -449,7 +449,7 @@ export const ExpensesPage = () => {
           </div>
 
           {/* Highest Category */}
-          <div className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl p-5 border border-purple-100 hover:shadow-lg transition-all group">
+          <div className="bg-linear-to-br from-purple-50 to-violet-50 rounded-2xl p-5 border border-purple-100 hover:shadow-lg transition-all group">
             <div className="flex items-center justify-between mb-3">
               <div className="p-2.5 bg-purple-100 rounded-xl group-hover:scale-110 transition-transform">
                 <TrendingUp className="h-5 w-5 text-purple-600" />
@@ -466,7 +466,7 @@ export const ExpensesPage = () => {
           </div>
 
           {/* Average Per Transaction */}
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 border border-blue-100 hover:shadow-lg transition-all group">
+          <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 border border-blue-100 hover:shadow-lg transition-all group">
             <div className="flex items-center justify-between mb-3">
               <div className="p-2.5 bg-blue-100 rounded-xl group-hover:scale-110 transition-transform">
                 <BarChart3 className="h-5 w-5 text-blue-600" />
@@ -483,7 +483,7 @@ export const ExpensesPage = () => {
           </div>
 
           {/* Total Records */}
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-5 border border-green-100 hover:shadow-lg transition-all group">
+          <div className="bg-linear-to-br from-green-50 to-emerald-50 rounded-2xl p-5 border border-green-100 hover:shadow-lg transition-all group">
             <div className="flex items-center justify-between mb-3">
               <div className="p-2.5 bg-green-100 rounded-xl group-hover:scale-110 transition-transform">
                 <Receipt className="h-5 w-5 text-green-600" />
@@ -498,7 +498,7 @@ export const ExpensesPage = () => {
 
         {/* Expense Table - Consistent with other tables */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-          <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50/50 to-white">
+          <div className="p-6 border-b border-gray-200 bg-linear-to-r from-gray-50/50 to-white">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <div>
                 <h3 className="text-xl font-bold flex items-center gap-2 text-gray-800">
@@ -509,12 +509,12 @@ export const ExpensesPage = () => {
                 </h3>
                 <p className="text-sm text-gray-500 mt-1">All operational expenses and overhead</p>
               </div>
-              <Badge className="bg-gradient-to-r from-gray-100 to-gray-50 text-gray-700 border border-gray-200 px-3 py-1">
+              <Badge className="bg-linear-to-r from-gray-100 to-gray-50 text-gray-700 border border-gray-200 px-3 py-1">
                 {filteredExpenses.length} records
               </Badge>
             </div>
             <div className="mt-4 flex flex-wrap gap-3">
-              <div className="relative flex-1 min-w-[200px]">
+              <div className="relative flex-1 min-w-50">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   type="text"
@@ -720,7 +720,7 @@ export const ExpensesPage = () => {
                       variant={currentPage === pageNum ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => handlePageChange(pageNum)}
-                      className="min-w-[36px]"
+                      className="min-w-9"
                       style={currentPage === pageNum ? { backgroundColor: '#F9C900', color: '#000000' } : {}}
                     >
                       {pageNum}
@@ -746,7 +746,7 @@ export const ExpensesPage = () => {
         {isModalOpen && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
-              <div className="sticky top-0 bg-gradient-to-r from-amber-50 to-white border-b border-gray-100 px-6 py-5 flex items-center justify-between">
+              <div className="sticky top-0 bg-linear-to-r from-amber-50 to-white border-b border-gray-100 px-6 py-5 flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">
                     {editingExpense ? 'Edit Expense' : 'Add New Expense'}
@@ -901,7 +901,7 @@ export const ExpensesPage = () => {
             <div className="fixed inset-0 bg-black/50 z-50" onClick={() => setShowPrintModal(false)} />
             <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
-                <div className="p-6 border-b bg-gradient-to-r from-amber-50 to-white flex justify-between items-center rounded-t-2xl">
+                <div className="p-6 border-b bg-linear-to-r from-amber-50 to-white flex justify-between items-center rounded-t-2xl">
                   <h2 className="text-xl font-bold flex items-center gap-2">
                     <Printer className="h-5 w-5 text-amber-500" />
                     Print Options

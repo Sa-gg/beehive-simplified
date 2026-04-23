@@ -318,8 +318,8 @@ export const BulkStockModal: React.FC<BulkStockModalProps> = ({
           {/* Header */}
           <div className={`px-6 py-4 flex items-center justify-between ${
             transactionType === 'IN' 
-              ? 'bg-gradient-to-r from-green-500 to-emerald-600' 
-              : 'bg-gradient-to-r from-red-500 to-rose-600'
+              ? 'bg-linear-to-r from-green-500 to-emerald-600' 
+              : 'bg-linear-to-r from-red-500 to-rose-600'
           }`}>
             <div className="flex items-center gap-3">
               {transactionType === 'IN' ? (
@@ -406,7 +406,7 @@ export const BulkStockModal: React.FC<BulkStockModalProps> = ({
               </div>
 
               {/* Items Rows */}
-              <div className="space-y-2 max-h-[280px] overflow-y-auto">
+              <div className="space-y-2 max-h-70 overflow-y-auto">
                 {bulkItems.map((bulkItem, index) => (
                   <div 
                     key={index} 
@@ -494,7 +494,7 @@ export const BulkStockModal: React.FC<BulkStockModalProps> = ({
                       setActiveItemIndex(null);
                     }}
                   />
-                  <div className="absolute left-0 right-0 top-[60px] bg-white border rounded-xl shadow-xl z-10 max-h-[300px] overflow-hidden max-w-md mx-auto">
+                  <div className="absolute left-0 right-0 top-[60px] bg-white border rounded-xl shadow-xl z-10 max-h-75 overflow-hidden max-w-md mx-auto">
                   <div className="p-3 border-b sticky top-0 bg-white">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -520,7 +520,7 @@ export const BulkStockModal: React.FC<BulkStockModalProps> = ({
                           className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-gray-50 text-left border-b last:border-0"
                           onClick={() => selectItemForIndex(activeItemIndex, item)}
                         >
-                          <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${
+                          <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
                             item.status === 'OUT_OF_STOCK' ? 'bg-red-500' :
                             item.status === 'LOW_STOCK' ? 'bg-yellow-500' : 
                             item.status === 'DISCREPANCY' ? 'bg-purple-500' : 'bg-green-500'
@@ -529,7 +529,7 @@ export const BulkStockModal: React.FC<BulkStockModalProps> = ({
                             <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
                             <p className="text-xs text-gray-500">{item.category}</p>
                           </div>
-                          <div className="text-right flex-shrink-0">
+                          <div className="text-right shrink-0">
                             <p className={`text-sm font-medium ${
                               item.currentStock < 0 ? 'text-purple-600' :
                               item.currentStock === 0 ? 'text-red-600' : 'text-gray-700'

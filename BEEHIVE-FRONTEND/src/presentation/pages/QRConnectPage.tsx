@@ -83,7 +83,7 @@ export const QRConnectPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 to-amber-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-yellow-50 to-amber-100 flex items-center justify-center p-4">
       {/* Floating bees */}
       <div className="fixed top-[10%] left-[10%] text-2xl opacity-30 animate-bounce">🐝</div>
       <div className="fixed top-[20%] right-[15%] text-2xl opacity-30 animate-bounce" style={{ animationDelay: '1s' }}>🐝</div>
@@ -100,7 +100,7 @@ export const QRConnectPage = () => {
         {/* QR Codes Grid */}
         <div className="space-y-6">
           {/* Menu QR */}
-          <div className="text-center p-4 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-2xl border-2 border-yellow-400">
+          <div className="text-center p-4 bg-linear-to-r from-yellow-50 to-amber-50 rounded-2xl border-2 border-yellow-400">
             <div className="font-semibold text-gray-700 mb-3 flex items-center justify-center gap-2">
               📱 Customer Menu
             </div>
@@ -156,7 +156,7 @@ export const QRConnectPage = () => {
         </div>
 
         {/* Instructions */}
-        <div className="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl">
+        <div className="mt-6 p-4 bg-linear-to-r from-yellow-50 to-amber-50 rounded-xl">
           <h3 className="font-semibold text-gray-700 text-sm mb-2 flex items-center gap-2">
             📝 How to Connect
           </h3>

@@ -387,7 +387,7 @@ export const LoyaltyPage = () => {
           <>
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-4 border border-amber-200">
+          <div className="bg-linear-to-br from-amber-50 to-orange-50 rounded-xl p-4 border border-amber-200">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-amber-100 rounded-lg">
                 <User className="h-5 w-5 text-amber-600" />
@@ -399,7 +399,7 @@ export const LoyaltyPage = () => {
             </div>
           </div>
           
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
+          <div className="bg-linear-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-green-100 rounded-lg">
                 <Gift className="h-5 w-5 text-green-600" />
@@ -411,7 +411,7 @@ export const LoyaltyPage = () => {
             </div>
           </div>
           
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200">
+          <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Star className="h-5 w-5 text-blue-600" />
@@ -423,7 +423,7 @@ export const LoyaltyPage = () => {
             </div>
           </div>
           
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200">
+          <div className="bg-linear-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-purple-100 rounded-lg">
                 <Award className="h-5 w-5 text-purple-600" />
@@ -669,7 +669,7 @@ export const LoyaltyPage = () => {
           <div className="space-y-6">
             {/* Redeemable Drinks Configuration */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-              <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-amber-50 to-orange-50">
+              <div className="p-4 border-b border-gray-100 bg-linear-to-r from-amber-50 to-orange-50">
                 <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                   <Gift className="h-5 w-5 text-amber-600" />
                   Redeemable Drinks
@@ -905,7 +905,7 @@ export const LoyaltyPage = () => {
             </div>
 
             {/* How It Works */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200 p-6">
+            <div className="bg-linear-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <Award className="h-5 w-5 text-amber-600" />
                 How the Loyalty System Works

@@ -119,7 +119,7 @@ export const AccountFormModal = React.memo(({
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-gradient-to-r from-amber-50 to-white border-b border-gray-100 px-6 py-5 flex items-center justify-between">
+        <div className="sticky top-0 bg-linear-to-r from-amber-50 to-white border-b border-gray-100 px-6 py-5 flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-gray-900">
               {editingUser ? 'Edit Account' : 'Add New Account'}

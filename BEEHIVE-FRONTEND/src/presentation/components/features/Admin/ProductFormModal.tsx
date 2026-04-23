@@ -493,7 +493,7 @@ export const ProductFormModal = memo(function ProductFormModal({
                     {/* Warning for background removal */}
                     {removeBackground && !imageProcessingProgress && (
                       <div className="flex items-start gap-2 p-2 bg-purple-50 rounded-lg border border-purple-200">
-                        <AlertTriangle className="h-4 w-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                        <AlertTriangle className="h-4 w-4 text-purple-600 mt-0.5 shrink-0" />
                         <span className="text-xs text-purple-700">
                           AI background removal may take 10-30 seconds depending on image size. The page may be briefly unresponsive.
                         </span>

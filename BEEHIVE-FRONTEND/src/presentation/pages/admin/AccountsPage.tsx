@@ -258,7 +258,7 @@ export const AccountsPage = () => {
 
         {/* Stats Cards - Staff accounts only */}
         <div className={`grid grid-cols-2 sm:grid-cols-3 gap-3 lg:gap-4 ${isAdmin ? 'lg:grid-cols-6' : 'lg:grid-cols-5'}`}>
-          <div className="bg-gradient-to-br from-gray-50 to-slate-50 rounded-2xl shadow-sm p-4 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-gray-50 to-slate-50 rounded-2xl shadow-sm p-4 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-2">
               <div className="p-2 bg-gray-100 rounded-xl group-hover:scale-110 transition-transform">
                 <Users className="h-4 w-4 text-gray-600" />
@@ -267,7 +267,7 @@ export const AccountsPage = () => {
             <p className="text-xs font-medium text-gray-500 mb-0.5">Total Staff</p>
             <p className="text-lg lg:text-xl font-bold text-gray-900">{isAdmin ? stats.totalUsers : stats.totalUsers - stats.admins}</p>
           </div>
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl shadow-sm p-4 border border-green-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-green-50 to-emerald-50 rounded-2xl shadow-sm p-4 border border-green-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-2">
               <div className="p-2 bg-green-100 rounded-xl group-hover:scale-110 transition-transform">
                 <Store className="h-4 w-4 text-green-600" />
@@ -276,7 +276,7 @@ export const AccountsPage = () => {
             <p className="text-xs font-medium text-gray-500 mb-0.5">Cashiers</p>
             <p className="text-lg lg:text-xl font-bold text-green-600">{stats.cashiers}</p>
           </div>
-          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl shadow-sm p-4 border border-orange-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-orange-50 to-amber-50 rounded-2xl shadow-sm p-4 border border-orange-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-2">
               <div className="p-2 bg-orange-100 rounded-xl group-hover:scale-110 transition-transform">
                 <ChefHat className="h-4 w-4 text-orange-600" />
@@ -285,7 +285,7 @@ export const AccountsPage = () => {
             <p className="text-xs font-medium text-gray-500 mb-0.5">Cooks</p>
             <p className="text-lg lg:text-xl font-bold text-orange-600">{stats.cooks}</p>
           </div>
-          <div className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl shadow-sm p-4 border border-purple-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-purple-50 to-violet-50 rounded-2xl shadow-sm p-4 border border-purple-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-2">
               <div className="p-2 bg-purple-100 rounded-xl group-hover:scale-110 transition-transform">
                 <ShieldCheck className="h-4 w-4 text-purple-600" />
@@ -295,7 +295,7 @@ export const AccountsPage = () => {
             <p className="text-lg lg:text-xl font-bold text-purple-600">{stats.managers}</p>
           </div>
           {isAdmin && (
-            <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl shadow-sm p-4 border border-red-100 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-linear-to-br from-red-50 to-rose-50 rounded-2xl shadow-sm p-4 border border-red-100 hover:shadow-lg transition-all duration-300 group">
               <div className="flex items-center justify-between mb-2">
                 <div className="p-2 bg-red-100 rounded-xl group-hover:scale-110 transition-transform">
                   <Shield className="h-4 w-4 text-red-600" />
@@ -305,7 +305,7 @@ export const AccountsPage = () => {
               <p className="text-lg lg:text-xl font-bold text-red-600">{stats.admins}</p>
             </div>
           )}
-          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl shadow-sm p-4 border border-emerald-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-emerald-50 to-teal-50 rounded-2xl shadow-sm p-4 border border-emerald-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-2">
               <div className="p-2 bg-emerald-100 rounded-xl group-hover:scale-110 transition-transform">
                 <UserCheck className="h-4 w-4 text-emerald-600" />
@@ -318,7 +318,7 @@ export const AccountsPage = () => {
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3 bg-white p-4 rounded-xl border border-gray-100">
-          <div className="relative flex-1 min-w-[200px]">
+          <div className="relative flex-1 min-w-50">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               type="text"
@@ -529,7 +529,7 @@ export const AccountsPage = () => {
                       variant={currentPage === pageNum ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => handlePageChange(pageNum)}
-                      className="min-w-[36px]"
+                      className="min-w-9"
                       style={currentPage === pageNum ? { backgroundColor: '#F9C900', color: '#000000' } : {}}
                     >
                       {pageNum}

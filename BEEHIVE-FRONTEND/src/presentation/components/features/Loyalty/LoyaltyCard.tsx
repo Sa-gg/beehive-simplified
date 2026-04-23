@@ -67,7 +67,7 @@ export const LoyaltyCard = ({
     // Show empty state for new customers
     return (
       <div className={cn(
-        "bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 rounded-lg p-3 border border-amber-200 dark:border-amber-700",
+        "bg-linear-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 rounded-lg p-3 border border-amber-200 dark:border-amber-700",
         className
       )}>
         <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
@@ -87,7 +87,7 @@ export const LoyaltyCard = ({
   if (compact) {
     return (
       <div className={cn(
-        "bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 rounded-lg p-3 border border-amber-200 dark:border-amber-700",
+        "bg-linear-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 rounded-lg p-3 border border-amber-200 dark:border-amber-700",
         className
       )}>
         <div className="flex items-center justify-between">
@@ -111,7 +111,7 @@ export const LoyaltyCard = ({
   // Full view with stamp visualization
   return (
     <div className={cn(
-      "bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 dark:from-amber-900/30 dark:via-orange-900/30 dark:to-yellow-900/30 rounded-xl p-4 border border-amber-200 dark:border-amber-700 shadow-sm",
+      "bg-linear-to-br from-amber-50 via-orange-50 to-yellow-50 dark:from-amber-900/30 dark:via-orange-900/30 dark:to-yellow-900/30 rounded-xl p-4 border border-amber-200 dark:border-amber-700 shadow-sm",
       className
     )}>
       <div className="flex items-center justify-between mb-3">
@@ -127,7 +127,7 @@ export const LoyaltyCard = ({
           </div>
         </div>
         {availableRewards > 0 && (
-          <div className="flex items-center gap-1 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg animate-pulse">
+          <div className="flex items-center gap-1 bg-linear-to-r from-green-400 to-emerald-500 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg animate-pulse">
             <Award className="w-4 h-4" />
             {availableRewards} FREE!
           </div>

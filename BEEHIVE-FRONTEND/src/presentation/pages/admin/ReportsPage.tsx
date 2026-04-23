@@ -1622,7 +1622,7 @@ export const ReportsPage = () => {
           <div className="fixed inset-0 bg-black/50 z-50" onClick={() => setShowPrintModal(false)} />
           <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
-              <div className="p-6 border-b bg-gradient-to-r from-amber-50 to-white flex justify-between items-center rounded-t-2xl">
+              <div className="p-6 border-b bg-linear-to-r from-amber-50 to-white flex justify-between items-center rounded-t-2xl">
                 <h2 className="text-xl font-bold flex items-center gap-2">
                   <Printer className="h-5 w-5 text-amber-500" />
                   Print Options - {activeTab === 'sales' ? 'Sales Report' : activeTab === 'inventory' ? 'Inventory Report' : 'Expense Report'}
@@ -1735,7 +1735,7 @@ export const ReportsPage = () => {
           <div className="fixed inset-0 bg-black/50 z-50" onClick={() => setShowExportModal(false)} />
           <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
-              <div className="p-6 border-b bg-gradient-to-r from-green-50 to-white flex justify-between items-center rounded-t-2xl">
+              <div className="p-6 border-b bg-linear-to-r from-green-50 to-white flex justify-between items-center rounded-t-2xl">
                 <h2 className="text-xl font-bold flex items-center gap-2">
                   <Download className="h-5 w-5 text-green-500" />
                   Export Options
@@ -1798,7 +1798,7 @@ const getPaymentStatusConfig = (status: string) => {
 const SalesReportContent = ({ data, formatCurrency }: { data: SalesReportData; formatCurrency: (value: number) => string }) => (
   <div className="space-y-6">
     {/* Report Header */}
-    <div className="bg-gradient-to-r from-amber-50 via-white to-amber-50 rounded-2xl p-4 border border-amber-100">
+    <div className="bg-linear-to-r from-amber-50 via-white to-amber-50 rounded-2xl p-4 border border-amber-100">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
@@ -1816,7 +1816,7 @@ const SalesReportContent = ({ data, formatCurrency }: { data: SalesReportData; f
     {/* Key Performance Indicators - Industry Standard Row 1 */}
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Gross Sales */}
-      <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl shadow-sm p-5 border border-green-100 hover:shadow-lg transition-all duration-300">
+      <div className="bg-linear-to-br from-emerald-50 to-green-50 rounded-2xl shadow-sm p-5 border border-green-100 hover:shadow-lg transition-all duration-300">
         <div className="flex items-center justify-between mb-2">
           <div className="p-2 bg-green-100 rounded-lg">
             <DollarSign className="h-5 w-5 text-green-600" />
@@ -1829,7 +1829,7 @@ const SalesReportContent = ({ data, formatCurrency }: { data: SalesReportData; f
       </div>
 
       {/* Discounts Given */}
-      <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl shadow-sm p-5 border border-red-100 hover:shadow-lg transition-all duration-300">
+      <div className="bg-linear-to-br from-red-50 to-rose-50 rounded-2xl shadow-sm p-5 border border-red-100 hover:shadow-lg transition-all duration-300">
         <div className="flex items-center justify-between mb-2">
           <div className="p-2 bg-red-100 rounded-lg">
             <ArrowDownCircle className="h-5 w-5 text-red-600" />
@@ -1842,7 +1842,7 @@ const SalesReportContent = ({ data, formatCurrency }: { data: SalesReportData; f
       </div>
 
       {/* Net Sales */}
-      <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl shadow-sm p-5 border border-amber-200 hover:shadow-lg transition-all duration-300">
+      <div className="bg-linear-to-br from-amber-50 to-orange-50 rounded-2xl shadow-sm p-5 border border-amber-200 hover:shadow-lg transition-all duration-300">
         <div className="flex items-center justify-between mb-2">
           <div className="p-2 bg-amber-100 rounded-lg">
             <TrendingUp className="h-5 w-5 text-amber-600" />
@@ -1855,7 +1855,7 @@ const SalesReportContent = ({ data, formatCurrency }: { data: SalesReportData; f
       </div>
 
       {/* Total Revenue (Collected) */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm p-5 border border-blue-200 hover:shadow-lg transition-all duration-300">
+      <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm p-5 border border-blue-200 hover:shadow-lg transition-all duration-300">
         <div className="flex items-center justify-between mb-2">
           <div className="p-2 bg-blue-100 rounded-lg">
             <DollarSign className="h-5 w-5 text-blue-600" />
@@ -2314,7 +2314,7 @@ const SalesReportContent = ({ data, formatCurrency }: { data: SalesReportData; f
     )}
 
     {/* VAT Summary Box */}
-    <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
+    <div className="bg-linear-to-r from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
       <h2 className="text-lg font-semibold mb-4">📋 VAT Summary (12% Inclusive)</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl p-4 border border-gray-100 text-center">
@@ -2339,7 +2339,7 @@ const InventoryReportContent = ({ data, formatCurrency }: { data: InventoryRepor
   <div className="space-y-6">
     {/* Summary Stats - Updated to match InventoryPage design */}
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm p-5 border border-blue-100 hover:shadow-lg transition-all duration-300 group">
+      <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm p-5 border border-blue-100 hover:shadow-lg transition-all duration-300 group">
         <div className="flex items-center justify-between mb-3">
           <div className="p-3 bg-blue-100 rounded-xl group-hover:scale-110 transition-transform">
             <Package className="h-5 w-5 text-blue-600" />
@@ -2351,7 +2351,7 @@ const InventoryReportContent = ({ data, formatCurrency }: { data: InventoryRepor
         <p className="text-xs text-gray-400 mt-2">in inventory</p>
       </div>
 
-      <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl shadow-sm p-5 border border-green-100 hover:shadow-lg transition-all duration-300 group">
+      <div className="bg-linear-to-br from-green-50 to-emerald-50 rounded-2xl shadow-sm p-5 border border-green-100 hover:shadow-lg transition-all duration-300 group">
         <div className="flex items-center justify-between mb-3">
           <div className="p-3 bg-green-100 rounded-xl group-hover:scale-110 transition-transform">
             <DollarSign className="h-5 w-5 text-green-600" />
@@ -2363,7 +2363,7 @@ const InventoryReportContent = ({ data, formatCurrency }: { data: InventoryRepor
         <p className="text-xs text-gray-400 mt-2">inventory worth</p>
       </div>
 
-      <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl shadow-sm p-5 border border-amber-100 hover:shadow-lg transition-all duration-300 group">
+      <div className="bg-linear-to-br from-amber-50 to-orange-50 rounded-2xl shadow-sm p-5 border border-amber-100 hover:shadow-lg transition-all duration-300 group">
         <div className="flex items-center justify-between mb-3">
           <div className="p-3 bg-amber-100 rounded-xl group-hover:scale-110 transition-transform">
             <AlertTriangle className="h-5 w-5 text-amber-600" />
@@ -2375,7 +2375,7 @@ const InventoryReportContent = ({ data, formatCurrency }: { data: InventoryRepor
         <p className="text-xs text-gray-400 mt-2">needs attention</p>
       </div>
 
-      <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl shadow-sm p-5 border border-red-100 hover:shadow-lg transition-all duration-300 group">
+      <div className="bg-linear-to-br from-red-50 to-rose-50 rounded-2xl shadow-sm p-5 border border-red-100 hover:shadow-lg transition-all duration-300 group">
         <div className="flex items-center justify-between mb-3">
           <div className="p-3 bg-red-100 rounded-xl group-hover:scale-110 transition-transform">
             <XCircle className="h-5 w-5 text-red-600" />
@@ -2617,7 +2617,7 @@ const InventoryReportContent = ({ data, formatCurrency }: { data: InventoryRepor
                   <Badge variant="outline" className="text-xs">{tx.reason}</Badge>
                 </td>
                 <td className="py-2 px-3 text-right font-semibold">{tx.quantity} {tx.unit}</td>
-                <td className="py-2 px-3 text-gray-500 text-xs max-w-[150px] truncate">{tx.notes || '-'}</td>
+                <td className="py-2 px-3 text-gray-500 text-xs max-w-37.5 truncate">{tx.notes || '-'}</td>
               </tr>
             ))}
             {(!data.stockTransactions || data.stockTransactions.length === 0) && (
@@ -2649,7 +2649,7 @@ const ExpensesReportContent = ({ data, formatCurrency }: { data: ExpenseReportDa
   <div className="space-y-6">
     {/* Stats Overview - Updated to match InventoryPage design */}
     <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-      <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl shadow-sm p-5 border border-orange-100 hover:shadow-lg transition-all duration-300 group">
+      <div className="bg-linear-to-br from-orange-50 to-amber-50 rounded-2xl shadow-sm p-5 border border-orange-100 hover:shadow-lg transition-all duration-300 group">
         <div className="flex items-center justify-between mb-3">
           <div className="p-3 bg-orange-100 rounded-xl group-hover:scale-110 transition-transform">
             <DollarSign className="h-5 w-5 text-orange-600" />
@@ -2661,7 +2661,7 @@ const ExpensesReportContent = ({ data, formatCurrency }: { data: ExpenseReportDa
         <p className="text-xs text-gray-400 mt-2">all expenses</p>
       </div>
       
-      <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl shadow-sm p-5 border border-amber-100 hover:shadow-lg transition-all duration-300 group">
+      <div className="bg-linear-to-br from-amber-50 to-yellow-50 rounded-2xl shadow-sm p-5 border border-amber-100 hover:shadow-lg transition-all duration-300 group">
         <div className="flex items-center justify-between mb-3">
           <div className="p-3 bg-amber-100 rounded-xl group-hover:scale-110 transition-transform">
             <TrendingDown className="h-5 w-5 text-amber-600" />
@@ -2673,7 +2673,7 @@ const ExpensesReportContent = ({ data, formatCurrency }: { data: ExpenseReportDa
         <p className="text-xs text-gray-400 mt-2">selected period</p>
       </div>
       
-      <div className="col-span-2 lg:col-span-1 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm p-5 border border-blue-100 hover:shadow-lg transition-all duration-300 group">
+      <div className="col-span-2 lg:col-span-1 bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm p-5 border border-blue-100 hover:shadow-lg transition-all duration-300 group">
         <div className="flex items-center justify-between mb-3">
           <div className="p-3 bg-blue-100 rounded-xl group-hover:scale-110 transition-transform">
             <Receipt className="h-5 w-5 text-blue-600" />
@@ -2724,7 +2724,7 @@ const ExpensesReportContent = ({ data, formatCurrency }: { data: ExpenseReportDa
                 <div key={cat.name} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
-                    <span className="text-sm text-gray-600 truncate max-w-[120px]">{cat.name}</span>
+                    <span className="text-sm text-gray-600 truncate max-w-30">{cat.name}</span>
                   </div>
                   <span className="text-sm font-semibold text-gray-900">
                     {formatCurrency(cat.value)}
@@ -2777,7 +2777,7 @@ const ExpensesReportContent = ({ data, formatCurrency }: { data: ExpenseReportDa
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gradient-to-r from-amber-50 to-white border-b border-gray-200">
+          <thead className="bg-linear-to-r from-amber-50 to-white border-b border-gray-200">
             <tr>
               <th className="py-3 px-4 text-left font-semibold text-gray-700">Date</th>
               <th className="py-3 px-4 text-left font-semibold text-gray-700">Category</th>

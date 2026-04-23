@@ -657,7 +657,7 @@ export const InventoryPage = () => {
             ? 'grid-cols-2 lg:grid-cols-5' 
             : 'grid-cols-2 lg:grid-cols-4'
         }`}>
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm p-5 border border-blue-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm p-5 border border-blue-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-3">
               <div className="p-3 bg-blue-100 rounded-xl group-hover:scale-110 transition-transform">
                 <Package className="h-5 w-5 text-blue-600" />
@@ -669,7 +669,7 @@ export const InventoryPage = () => {
             </p>
             <p className="text-xs text-gray-400 mt-2">all inventory</p>
           </div>
-          <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl shadow-sm p-5 border border-yellow-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-yellow-50 to-amber-50 rounded-2xl shadow-sm p-5 border border-yellow-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-3">
               <div className="p-3 bg-yellow-100 rounded-xl group-hover:scale-110 transition-transform">
                 <AlertTriangle className="h-5 w-5 text-yellow-600" />
@@ -686,7 +686,7 @@ export const InventoryPage = () => {
             </p>
             <p className="text-xs text-gray-400 mt-2">{stats.lowStock > 0 ? 'needs restock' : 'all clear'}</p>
           </div>
-          <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl shadow-sm p-5 border border-red-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-red-50 to-rose-50 rounded-2xl shadow-sm p-5 border border-red-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-3">
               <div className="p-3 bg-red-100 rounded-xl group-hover:scale-110 transition-transform">
                 <AlertTriangle className="h-5 w-5 text-red-600" />
@@ -705,7 +705,7 @@ export const InventoryPage = () => {
           </div>
           {/* Discrepancy Card - Only show if there are discrepancies */}
           {(stats.discrepancy ?? 0) > 0 && (
-            <div className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl shadow-sm p-5 border border-purple-100 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-linear-to-br from-purple-50 to-violet-50 rounded-2xl shadow-sm p-5 border border-purple-100 hover:shadow-lg transition-all duration-300 group">
               <div className="flex items-center justify-between mb-3">
                 <div className="p-3 bg-purple-100 rounded-xl group-hover:scale-110 transition-transform">
                   <AlertOctagon className="h-5 w-5 text-purple-600" />
@@ -721,7 +721,7 @@ export const InventoryPage = () => {
               <p className="text-xs text-gray-400 mt-2">negative stock</p>
             </div>
           )}
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl shadow-sm p-5 border border-green-100 hover:shadow-lg transition-all duration-300 group">
+          <div className="bg-linear-to-br from-green-50 to-emerald-50 rounded-2xl shadow-sm p-5 border border-green-100 hover:shadow-lg transition-all duration-300 group">
             <div className="flex items-center justify-between mb-3">
               <div className="p-3 bg-green-100 rounded-xl group-hover:scale-110 transition-transform">
                 <TrendingUp className="h-5 w-5 text-green-600" />
@@ -1038,7 +1038,7 @@ export const InventoryPage = () => {
                         variant={currentPage === pageNum ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => handlePageChange(pageNum)}
-                        className="min-w-[36px]"
+                        className="min-w-9"
                         style={currentPage === pageNum ? { backgroundColor: '#F9C900', color: '#000000' } : {}}
                       >
                         {pageNum}

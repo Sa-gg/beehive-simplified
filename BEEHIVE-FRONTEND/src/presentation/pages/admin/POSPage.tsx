@@ -1134,7 +1134,7 @@ export const POSPage = () => {
         <div className="flex-1 flex flex-col bg-gray-50 lg:rounded-lg lg:shadow-lg lg:border lg:border-gray-200 min-h-0 min-w-0 overflow-hidden">
           {/* Edit Mode Banner */}
           {isEditMode && (
-            <div className="bg-blue-600 text-white px-4 py-2 flex items-center justify-between flex-shrink-0">
+            <div className="bg-blue-600 text-white px-4 py-2 flex items-center justify-between shrink-0">
               <div>
                 <p className="text-sm font-medium">Editing Order: {editingOrder?.orderNumber}</p>
                 <p className="text-xs opacity-90">Customer: {editingOrder?.customerName}</p>
@@ -1151,7 +1151,7 @@ export const POSPage = () => {
           )}
           {/* Reorder Mode Banner */}
           {isReordering && (
-            <div className="bg-green-600 text-white px-4 py-2 flex items-center justify-between flex-shrink-0">
+            <div className="bg-green-600 text-white px-4 py-2 flex items-center justify-between shrink-0">
               <div>
                 <p className="text-sm font-medium">Reordering from: {reorderFrom?.orderNumber}</p>
                 <p className="text-xs opacity-90">Original order - You can modify items before confirming</p>
@@ -1168,7 +1168,7 @@ export const POSPage = () => {
           )}
           {/* Link Order Mode Banner */}
           {isLinkingOrder && (
-            <div className="bg-amber-500 text-white px-4 py-2 flex items-center justify-between flex-shrink-0">
+            <div className="bg-amber-500 text-white px-4 py-2 flex items-center justify-between shrink-0">
               <div>
                 <p className="text-sm font-medium">🔗 Adding items to: {linkToOrder?.orderNumber}</p>
                 <p className="text-xs opacity-90">This will create a linked order for {customerName || 'Guest'}</p>
@@ -1185,7 +1185,7 @@ export const POSPage = () => {
           )}
           {/* Add to Tab Mode Banner */}
           {isAddingToTab && (
-            <div className="bg-emerald-600 text-white px-4 py-2 flex items-center justify-between flex-shrink-0">
+            <div className="bg-emerald-600 text-white px-4 py-2 flex items-center justify-between shrink-0">
               <div>
                 <p className="text-sm font-medium">📋 Adding to Tab: {addToTab?.orderNumber}</p>
                 <p className="text-xs opacity-90">Items will be added to existing order for {customerName || 'Guest'} (Table {tableNumber || 'N/A'})</p>
@@ -1201,7 +1201,7 @@ export const POSPage = () => {
             </div>
           )}
           {/* Category Tabs */}
-          <div className="bg-white border-b border-gray-200 p-3 lg:p-4 flex-shrink-0">
+          <div className="bg-white border-b border-gray-200 p-3 lg:p-4 shrink-0">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-lg lg:text-xl font-bold">
                 {isEditMode ? 'Edit Order - Menu' : isReordering ? 'Reorder - Menu' : isLinkingOrder ? 'Add Items - Menu' : isAddingToTab ? 'Add Items to Tab - Menu' : 'Menu'}
@@ -1232,7 +1232,7 @@ export const POSPage = () => {
                 variant={selectedCategory === 'all' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setSelectedCategory('all')}
-                className="capitalize whitespace-nowrap text-xs lg:text-sm flex-shrink-0"
+                className="capitalize whitespace-nowrap text-xs lg:text-sm shrink-0"
               >
                 All
               </Button>
@@ -1240,7 +1240,7 @@ export const POSPage = () => {
                 variant={selectedCategory === 'best seller' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setSelectedCategory('best seller')}
-                className="capitalize whitespace-nowrap text-xs lg:text-sm flex-shrink-0"
+                className="capitalize whitespace-nowrap text-xs lg:text-sm shrink-0"
               >
                 Best Seller
               </Button>
@@ -1251,7 +1251,7 @@ export const POSPage = () => {
                   variant={selectedCategory === category.id ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setSelectedCategory(category.id)}
-                  className="capitalize whitespace-nowrap text-xs lg:text-sm flex-shrink-0"
+                  className="capitalize whitespace-nowrap text-xs lg:text-sm shrink-0"
                 >
                   {category.displayName}
                 </Button>
@@ -1301,7 +1301,7 @@ export const POSPage = () => {
         </div>
 
         {/* Desktop - Order Summary Sidebar */}
-        <div className="hidden lg:block lg:w-80 xl:w-96 flex-shrink-0 overflow-hidden">
+        <div className="hidden lg:block lg:w-80 xl:w-96 shrink-0 overflow-hidden">
           <OrderSummary
             items={orderItems}
             customerName={customerName}

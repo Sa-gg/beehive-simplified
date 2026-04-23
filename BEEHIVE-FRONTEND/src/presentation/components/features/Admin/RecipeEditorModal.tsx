@@ -280,7 +280,7 @@ export const RecipeEditorModal = ({ menuItemId, menuItemName, onClose, onSuccess
           <div className="flex-1 overflow-y-auto p-6 space-y-6">
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-                <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
                 <p className="text-sm text-red-700">{error}</p>
               </div>
             )}
@@ -499,7 +499,7 @@ export const RecipeEditorModal = ({ menuItemId, menuItemName, onClose, onSuccess
                 {ingredients.length > 0 && (
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <div className="flex items-start gap-3">
-                      <CheckCircle className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
                       <div className="flex-1">
                         <p className="text-sm font-medium text-blue-900">Configuration Summary</p>
                         <p className="text-sm text-blue-700 mt-1">

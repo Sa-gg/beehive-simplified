@@ -1279,7 +1279,7 @@ export const OrdersPage = () => {
                     <MoreVertical className="h-3 w-3" />
                   </Button>
                   {openMoreActionsId === order.id && (
-                    <div className="absolute right-0 bottom-full mb-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-[100]">
+                    <div className="absolute right-0 bottom-full mb-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-100">
                       <button
                         onClick={() => updateOrderStatus(order.id, 'CANCELLED')}
                         className="w-full px-3 py-2 text-left text-xs text-red-600 hover:bg-red-50 flex items-center gap-2 rounded-lg"
@@ -1328,7 +1328,7 @@ export const OrdersPage = () => {
                     <MoreVertical className="h-3 w-3" />
                   </Button>
                   {openMoreActionsId === order.id && (
-                    <div className="absolute right-0 bottom-full mb-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-[100]">
+                    <div className="absolute right-0 bottom-full mb-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-100">
                       <button
                         onClick={() => startAuthorizedAction('void', order.id, order)}
                         className="w-full px-3 py-2 text-left text-xs text-red-600 hover:bg-red-50 flex items-center gap-2 first:rounded-t-lg"
@@ -1385,7 +1385,7 @@ export const OrdersPage = () => {
                     <MoreVertical className="h-3 w-3" />
                   </Button>
                   {openMoreActionsId === order.id && (
-                    <div className="absolute right-0 bottom-full mb-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-[100]">
+                    <div className="absolute right-0 bottom-full mb-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-100">
                       <button
                         onClick={() => startAuthorizedAction('refund', order.id, order)}
                         className="w-full px-3 py-2 text-left text-xs text-purple-600 hover:bg-purple-50 flex items-center gap-2 rounded-lg"
@@ -1443,7 +1443,7 @@ export const OrdersPage = () => {
                     <MoreVertical className="h-3 w-3" />
                   </Button>
                   {openMoreActionsId === order.id && (
-                    <div className="absolute right-0 bottom-full mb-1 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-[100]">
+                    <div className="absolute right-0 bottom-full mb-1 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-100">
                       <button
                         onClick={() => startAuthorizedAction('complimentary', order.id, order)}
                         className="w-full px-3 py-2 text-left text-xs text-pink-600 hover:bg-pink-50 flex items-center gap-2 first:rounded-t-lg"
@@ -1515,7 +1515,7 @@ export const OrdersPage = () => {
                     <MoreVertical className="h-3 w-3" />
                   </Button>
                   {openMoreActionsId === order.id && (
-                    <div className="absolute right-0 bottom-full mb-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-[100]">
+                    <div className="absolute right-0 bottom-full mb-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-100">
                       <button
                         onClick={() => startAuthorizedAction('refund', order.id, order)}
                         className="w-full px-3 py-2 text-left text-xs text-purple-600 hover:bg-purple-50 flex items-center gap-2 rounded-lg"
@@ -1625,7 +1625,7 @@ export const OrdersPage = () => {
 
             {/* Link Orders - only show when enabled in settings */}
             {linkedOrdersEnabled && (linkMode ? (
-              <div className="flex items-center gap-1.5 flex-shrink-0">
+              <div className="flex items-center gap-1.5 shrink-0">
                 <Badge className="bg-blue-100 text-blue-700 border border-blue-200 text-xs">
                   {selectedOrdersForLink.size} selected
                 </Badge>
@@ -1664,7 +1664,7 @@ export const OrdersPage = () => {
             ))}
 
             {/* Grid Layout Toggle */}
-            <div className="flex items-center gap-0.5 border border-gray-200 rounded-lg p-0.5 bg-gray-50 flex-shrink-0">
+            <div className="flex items-center gap-0.5 border border-gray-200 rounded-lg p-0.5 bg-gray-50 shrink-0">
               <button
                 onClick={() => setGridColumns(1)}
                 className={`p-1.5 rounded ${gridColumns === 1 ? 'bg-amber-100 text-amber-700' : 'text-gray-400 hover:text-gray-600'}`}
@@ -1713,7 +1713,7 @@ export const OrdersPage = () => {
 
           {/* Filters Row */}
           <div className="flex items-center gap-1.5 mt-2 overflow-x-auto">
-            <Filter className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
+            <Filter className="h-3.5 w-3.5 text-gray-500 shrink-0" />
             <Button
               variant={selectedStatus === 'all' ? 'default' : 'outline'}
               size="sm"
@@ -1973,7 +1973,7 @@ export const OrdersPage = () => {
                       )}
                       <div className="col-span-full">
                         {/* Linked Orders Container */}
-                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200 p-4">
+                        <div className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200 p-4">
                           {/* Group Header */}
                           <div className="flex items-center justify-between mb-4 pb-3 border-b border-blue-200">
                             <div className="flex items-center gap-3">
@@ -2017,7 +2017,7 @@ export const OrdersPage = () => {
                             return (
                               <div 
                                 key={o.id}
-                                className={`flex-1 min-w-[300px] bg-white rounded-lg border border-gray-200 border-l-4 ${oStatusBorderColor} p-3`}
+                                className={`flex-1 min-w-75 bg-white rounded-lg border border-gray-200 border-l-4 ${oStatusBorderColor} p-3`}
                               >
                                 {/* Header */}
                                 <div className="flex items-center justify-between mb-2">
@@ -2136,7 +2136,7 @@ export const OrdersPage = () => {
                                     </Button>
                                     
                                     {openMoreActionsId === linkedOrderMenuId && (
-                                      <div className="absolute right-0 bottom-full mb-1 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-[100]">
+                                      <div className="absolute right-0 bottom-full mb-1 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-100">
                                         {/* PREPARING orders - Void and Void & Reorder */}
                                         {o.status === 'PREPARING' && (
                                           <>
@@ -2339,7 +2339,7 @@ export const OrdersPage = () => {
                               </Button>
                               
                               {openMoreActionsId === `master_${order.id}` && (
-                                <div className="absolute right-0 bottom-full mb-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-[100]">
+                                <div className="absolute right-0 bottom-full mb-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-100">
                                   <div className="py-1">
                                     <button
                                       onClick={() => startMasterLinkedAction('complimentary', order.id)}
@@ -2530,14 +2530,14 @@ export const OrdersPage = () => {
                               size="sm"
                               onClick={() => handleEditOrder(order)}
                               variant="outline"
-                              className="flex-1 lg:flex-none lg:min-w-[120px] border-blue-300 text-blue-600 hover:bg-blue-50"
+                              className="flex-1 lg:flex-none lg:min-w-30 border-blue-300 text-blue-600 hover:bg-blue-50"
                             >
                               ✏️ Edit Order
                             </Button>
                             <Button
                               size="sm"
                               onClick={() => updateOrderStatus(order.id, 'PREPARING')}
-                              className="flex-1 lg:flex-none lg:min-w-[120px]"
+                              className="flex-1 lg:flex-none lg:min-w-30"
                               style={{ backgroundColor: '#F9C900', color: '#000000' }}
                             >
                               👨‍🍳 Start Preparing
@@ -2567,7 +2567,7 @@ export const OrdersPage = () => {
                                 </Button>
                                 
                                 {openMoreActionsId === order.id && (
-                                  <div className="absolute right-0 bottom-full mb-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-[100]">
+                                  <div className="absolute right-0 bottom-full mb-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-100">
                                     <button
                                       onClick={() => updateOrderStatus(order.id, 'CANCELLED')}
                                       className="w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 rounded-lg"
@@ -2588,7 +2588,7 @@ export const OrdersPage = () => {
                             <Button
                               size="sm"
                               onClick={() => updateOrderStatus(order.id, 'COMPLETED')}
-                              className="lg:min-w-[120px]"
+                              className="lg:min-w-30"
                               style={{ backgroundColor: '#F9C900', color: '#000000' }}
                             >
                               ✅ Mark Complete
@@ -2630,7 +2630,7 @@ export const OrdersPage = () => {
                                 </Button>
                                 
                                 {openMoreActionsId === order.id && (
-                                  <div className="absolute right-0 bottom-full mb-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-[100]">
+                                  <div className="absolute right-0 bottom-full mb-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-100">
                                     <button
                                       onClick={() => startAuthorizedAction('void', order.id, order)}
                                       className="w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 first:rounded-t-lg"
@@ -2667,7 +2667,7 @@ export const OrdersPage = () => {
                             <Button
                               size="sm"
                               onClick={() => updateOrderStatus(order.id, 'COMPLETED')}
-                              className="lg:min-w-[120px]"
+                              className="lg:min-w-30"
                               style={{ backgroundColor: '#F9C900', color: '#000000' }}
                             >
                               ✅ Mark Complete
@@ -2698,7 +2698,7 @@ export const OrdersPage = () => {
                                 </Button>
                                 
                                 {openMoreActionsId === order.id && (
-                                  <div className="absolute right-0 bottom-full mb-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-[100]">
+                                  <div className="absolute right-0 bottom-full mb-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-100">
                                     <button
                                       onClick={() => startAuthorizedAction('refund', order.id, order)}
                                       className="w-full px-4 py-2.5 text-left text-sm text-purple-600 hover:bg-purple-50 flex items-center gap-2 rounded-lg"
@@ -2719,7 +2719,7 @@ export const OrdersPage = () => {
                             <Button
                               size="sm"
                               onClick={() => updateOrderStatus(order.id, 'COMPLETED')}
-                              className="lg:min-w-[120px]"
+                              className="lg:min-w-30"
                               style={{ backgroundColor: '#F9C900', color: '#000000' }}
                             >
                               ✅ Order Served
@@ -2756,7 +2756,7 @@ export const OrdersPage = () => {
                             <Button
                               size="sm"
                               onClick={() => handleMarkPaidAndPrint(order)}
-                              className="flex items-center gap-1 lg:min-w-[140px]"
+                              className="flex items-center gap-1 lg:min-w-35"
                               style={{ backgroundColor: '#F9C900', color: '#000000' }}
                             >
                               <Printer className="h-4 w-4" />
@@ -2808,7 +2808,7 @@ export const OrdersPage = () => {
                                 </Button>
                                 
                                 {openMoreActionsId === order.id && (
-                                  <div className="absolute right-0 bottom-full mb-1 w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-[100]">
+                                  <div className="absolute right-0 bottom-full mb-1 w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-100">
                                     <button
                                       onClick={() => startAuthorizedAction('complimentary', order.id, order)}
                                       className="w-full px-4 py-2.5 text-left text-sm text-pink-600 hover:bg-pink-50 flex items-center gap-2 first:rounded-t-lg"
@@ -2866,7 +2866,7 @@ export const OrdersPage = () => {
                             <Button
                               size="sm"
                               onClick={() => printReceipt(order)}
-                              className="flex items-center gap-1 lg:min-w-[140px]"
+                              className="flex items-center gap-1 lg:min-w-35"
                               style={{ backgroundColor: '#F9C900', color: '#000000' }}
                             >
                               <Printer className="h-4 w-4" />
@@ -2897,7 +2897,7 @@ export const OrdersPage = () => {
                                 </Button>
                                 
                                 {openMoreActionsId === order.id && (
-                                  <div className="absolute right-0 bottom-full mb-1 w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-[100]">
+                                  <div className="absolute right-0 bottom-full mb-1 w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-100">
                                     <button
                                       onClick={() => startAuthorizedAction('refund', order.id, order)}
                                       className="w-full px-4 py-2.5 text-left text-sm text-purple-600 hover:bg-purple-50 flex items-center gap-2 first:rounded-t-lg"
@@ -3191,7 +3191,7 @@ export const OrdersPage = () => {
       )}
       {/* Payment Method Change Modal */}
       {showPaymentMethodModal && selectedOrder && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50">
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md m-4">
             <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-xl font-bold">Change Payment Method</h2>
@@ -3254,7 +3254,7 @@ export const OrdersPage = () => {
       {showMergeModal && mergedOrderData && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-amber-50 to-white">
+            <div className="p-6 border-b border-gray-200 bg-linear-to-r from-amber-50 to-white">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-bold flex items-center gap-2">

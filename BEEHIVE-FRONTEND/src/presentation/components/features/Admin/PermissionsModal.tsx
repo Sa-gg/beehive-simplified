@@ -84,7 +84,7 @@ export const PermissionsModal = React.memo(({
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-gradient-to-r from-purple-50 to-white border-b border-gray-100 px-6 py-5 flex items-center justify-between">
+        <div className="sticky top-0 bg-linear-to-r from-purple-50 to-white border-b border-gray-100 px-6 py-5 flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
               <Shield className="h-5 w-5 text-purple-500" />
@@ -104,7 +104,7 @@ export const PermissionsModal = React.memo(({
 
         <div className="p-6 space-y-6">
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start gap-3">
-            <Shield className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <Shield className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
             <div>
               <p className="font-medium text-blue-900">Role-Based Access Control</p>
               <p className="text-sm text-blue-700 mt-1">

@@ -260,7 +260,7 @@ export const AdminLayout = ({ children, hideHeader = false, hideHeaderOnDesktop 
     <div className="min-h-screen flex overflow-hidden" style={{ background: 'linear-gradient(135deg, #FFFBF0 0%, #FFF8E1 100%)' }}>
       {/* Global New Order Alert Banner - Modern Yellow Theme */}
       {newOrderAlert && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100]">
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-100">
           <div 
             className="bg-gray-900 text-white pl-3 pr-4 py-2.5 rounded-full shadow-2xl flex items-center gap-3 cursor-pointer hover:bg-gray-800 transition-all animate-pulse"
             onClick={() => {
@@ -359,7 +359,7 @@ export const AdminLayout = ({ children, hideHeader = false, hideHeaderOnDesktop 
                   style={isActive ? { backgroundColor: '#F9C900' } : {}}
                   title={!sidebarOpen && !isMobile ? item.label : undefined}
                 >
-                  <span className="flex-shrink-0 relative">
+                  <span className="shrink-0 relative">
                     <IconComponent className={`h-5 w-5 ${isActive ? 'text-gray-900' : item.iconColor}`} />
                     {/* Badge for collapsed sidebar */}
                     {!sidebarOpen && !isMobile && item.badge && (
@@ -373,7 +373,7 @@ export const AdminLayout = ({ children, hideHeader = false, hideHeaderOnDesktop 
                       <span className="text-sm flex-1">{item.label}</span>
                       {/* Badge for expanded sidebar */}
                       {item.badge && (
-                        <span className={`${item.badgeColor} text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center animate-pulse`}>
+                        <span className={`${item.badgeColor} text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-5 text-center animate-pulse`}>
                           {item.badge}
                         </span>
                       )}
@@ -711,7 +711,7 @@ export const AdminLayout = ({ children, hideHeader = false, hideHeaderOnDesktop 
           {hideHeader && isMobile && (
             <button
               onClick={() => setSidebarOpen(true)}
-              className="fixed top-4 left-4 z-[60] p-3 rounded-lg shadow-lg transition-colors"
+              className="fixed top-4 left-4 z-60 p-3 rounded-lg shadow-lg transition-colors"
               style={{ backgroundColor: '#F9C900' }}
             >
               <Menu className="h-6 w-6 text-black" />

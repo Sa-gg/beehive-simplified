@@ -109,7 +109,7 @@ export const FeeInputModal = ({
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
         {/* Header */}
-        <div className={`bg-gradient-to-r ${config.gradient} text-white px-6 py-4 flex items-center justify-between`}>
+        <div className={`bg-linear-to-r ${config.gradient} text-white px-6 py-4 flex items-center justify-between`}>
           <div className="flex items-center gap-3">
             <Icon className="h-6 w-6" />
             <h2 className="text-xl font-bold">{config.title}</h2>
