@@ -1135,7 +1135,7 @@ export const StockTransactionsPage = () => {
                     {/* Read-only Notes */}
                     <div>
                       <label className="text-xs text-gray-500 uppercase tracking-wide">Notes</label>
-                      <div className="mt-1 bg-gray-50 rounded-lg p-4 max-h-[200px] overflow-y-auto">
+                      <div className="mt-1 bg-gray-50 rounded-lg p-4 max-h-50 overflow-y-auto">
                         <p className="text-sm text-gray-700 whitespace-pre-wrap">
                           {selectedTransaction.notes || <span className="text-gray-400 italic">No notes</span>}
                         </p>
@@ -1175,7 +1175,7 @@ export const StockTransactionsPage = () => {
                             <p className="text-sm text-gray-500">No changes have been made to this transaction.</p>
                           </div>
                         ) : (
-                          <div className="space-y-2 max-h-[200px] overflow-y-auto">
+                          <div className="space-y-2 max-h-50 overflow-y-auto">
                             {auditLogs.map((log, idx) => (
                               <div key={log.id || idx} className="bg-gray-50 rounded-lg p-3 text-sm">
                                 <div className="flex items-center justify-between mb-1">
