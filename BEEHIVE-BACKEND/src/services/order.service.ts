@@ -362,6 +362,7 @@ export class OrderService {
     }
 
     // If some deductions failed, you may want to handle this (e.g., notify admin)
+    const failCount = deductionResults.filter((r) => !r.success).length;
     if (failCount > 0) {
       console.warn(`⚠️ Some inventory deductions failed for order ${order.orderNumber}`);
       // You could create a notification or alert here
