@@ -1,3 +1,224 @@
+# BEEHIVE POS — Client Machine Setup Guide
+
+This guide walks through setting up BEEHIVE POS on a brand new Windows machine.
+
+---
+
+## Part 1 — Install Required Software
+
+Do these steps **once** before anything else. All software is free.
+
+---
+
+### 1. Git
+
+Git is needed to download the project from GitHub.
+
+1. Go to **https://git-scm.com/download/win**
+2. Download the installer and run it
+3. Click **Next** on every screen — all defaults are fine
+4. When done, open **Command Prompt** and verify:
+   ```
+   git --version
+   ```
+   You should see something like `git version 2.x.x`
+
+---
+
+### 2. Node.js
+
+Node.js runs the backend server.
+
+1. Go to **https://nodejs.org/en/download**
+2. Download the **LTS** version for Windows (the `.msi` file)
+3. Run the installer — click **Next** on every screen
+4. Verify in Command Prompt:
+   ```
+   node --version
+   npm --version
+   ```
+   Both should show a version number (Node should be v22 or higher)
+
+---
+
+### 3. PostgreSQL + pgAdmin
+
+PostgreSQL is the database. pgAdmin is a visual tool to manage it (installed automatically).
+
+1. Go to **https://www.postgresql.org/download/windows/**
+2. Click **Download the installer** (EDB installer)
+3. Select **Version 16** for Windows x86-64
+4. Run the installer:
+   - Set a **password** for the `postgres` user — **write this down**, you will need it
+   - Leave **Port** as `5432`
+   - Leave **Locale** as default
+   - Uncheck **Stack Builder** at the end (not needed)
+5. PostgreSQL will install as a Windows service and **start automatically on every boot**
+6. To verify: open **pgAdmin** from the Start menu, connect with your password — if it connects, everything is working
+
+---
+
+## Part 2 — Get the Project
+
+Open **Command Prompt** and run:
+
+```
+git clone https://github.com/Sa-gg/beehive-simplified.git BEEHIVE
+```
+
+This creates a `BEEHIVE` folder in whatever directory you ran the command from.  
+Recommended location: your Desktop.
+
+---
+
+## Part 3 — Create the Environment File
+
+Before running setup, you need to tell the app your database password.
+
+1. Open the `BEEHIVE` folder
+2. Go into `BEEHIVE-BACKEND`
+3. Create a new text file named **`.env`** (just `.env`, no other name)
+4. Paste this inside it:
+
+```
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/beehive?schema=public"
+JWT_SECRET="beehive-secret-change-this"
+PORT=3000
+```
+
+5. Replace `YOUR_PASSWORD` with the PostgreSQL password you set during installation
+6. Save the file
+
+> **Tip:** To create `.env`, open Notepad, paste the content, then go to **File → Save As**, set **Save as type** to **All Files**, and type `.env` as the filename.
+
+---
+
+## Part 4 — Run Setup (One Time Only)
+
+Double-click **`setup.bat`** inside the `BEEHIVE` folder.
+
+What it does automatically:
+- Installs all dependencies
+- Creates the database and all tables
+- Loads default menu items, categories, and staff accounts
+
+When it finishes you will see:
+
+```
+============================================
+ Setup complete! You can now run start.bat
+
+ Default admin login:
+   Email   : admin@beehive.com
+   Password: password123
+
+ IMPORTANT: Change the admin password after first login!
+============================================
+```
+
+> If you see an error, check that:
+> - PostgreSQL is running (open pgAdmin and try to connect)
+> - The password in `.env` matches what you set during PostgreSQL installation
+
+---
+
+## Part 5 — Daily Use
+
+Double-click **`start.bat`** inside the `BEEHIVE` folder every day to start the system.
+
+What it does automatically:
+- Starts PostgreSQL if it is not already running
+- Builds the app if it has not been built yet
+- Stops any existing server on port 3000
+- Starts the server **in the background** (no window to keep open)
+- Waits until the server is ready, then opens the browser automatically
+
+The browser will open to **http://localhost:3000** — the system is ready.
+
+**You can close the setup window after it says the server is running.** The server keeps running in the background.
+
+---
+
+## Stop the Server
+
+To stop BEEHIVE:
+
+1. Press **Ctrl + Shift + Esc** to open Task Manager
+2. Find **node.exe** in the list
+3. Click it and press **End Task**
+
+---
+
+## Create a Desktop Shortcut (Optional)
+
+To make it easier to start every day:
+
+1. Right-click `start.bat` → **Create Shortcut**
+2. Move the shortcut to the Desktop
+3. Rename it `BEEHIVE POS`
+
+---
+
+## Default Staff Accounts
+
+These are created automatically during setup:
+
+| Role    | Email                  | Password    | Phone       |
+|---------|------------------------|-------------|-------------|
+| Admin   | admin@beehive.com      | password123 | 09511617396 |
+| Manager | manager@beehive.com    | password123 | 09123456789 |
+| Cashier | cashier@beehive.com    | password123 | 09234567890 |
+| Cook    | cook@beehive.com       | password123 | 09345678901 |
+
+> **Change all passwords after first login** in the Account Management section.
+
+---
+
+## Troubleshooting
+
+### "Server did not start after 60 seconds"
+- Make sure PostgreSQL is running — open pgAdmin and try to connect
+- Check the log file at `BEEHIVE\BEEHIVE-BACKEND\server.log` for the exact error
+- Make sure the password in `.env` is correct
+
+### "Migration failed" during setup
+- PostgreSQL is probably not running — start it via pgAdmin or the Windows Services panel
+- Check the password in `.env` matches your PostgreSQL password
+- Run `setup.bat` again — it will ask if you want to re-run, type `y`
+
+### Re-running setup (reset everything)
+- Double-click `setup.bat` again
+- Type `y` when it asks to re-run
+- **Warning:** This resets the database. All orders and data will be lost. Default accounts will be restored.
+
+### Port 3000 already in use
+- `start.bat` automatically detects and stops anything running on port 3000 before starting
+- If it still fails: open Task Manager → find `node.exe` → End Task → run `start.bat` again
+
+---
+
+## Server Logs
+
+If something goes wrong, check these files inside `BEEHIVE\BEEHIVE-BACKEND\`:
+
+- `server.log` — normal server output
+- `server-error.log` — error messages
+
+---
+
+## Architecture
+
+```
+http://localhost:3000
+        │
+  [Node.js Server]  ← started by start.bat, runs hidden in background
+  ├── /api/*        → API routes (orders, menu, auth, inventory, etc.)
+  ├── /uploads/*    → Product images
+  └── /*            → React frontend (pre-built static files)
+```
+
+One server, one port, no separate processes. The browser talks directly to Node.js.
+
 ---
 
 ## Fixes Applied
