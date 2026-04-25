@@ -916,6 +916,7 @@ export const SettingsPage = () => {
                         type="password"
                         maxLength={4}
                         value={currentPin}
+                        autoComplete="new-password"
                         onChange={(e) => setCurrentPin(e.target.value.replace(/\D/g, ''))}
                         className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
                         placeholder="Enter current PIN"
@@ -927,6 +928,7 @@ export const SettingsPage = () => {
                         type="password"
                         maxLength={4}
                         value={newPin}
+                        autoComplete="new-password"
                         onChange={(e) => setNewPin(e.target.value.replace(/\D/g, ''))}
                         className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
                         placeholder="Enter new 4-digit PIN"
@@ -938,6 +940,7 @@ export const SettingsPage = () => {
                         type="password"
                         maxLength={4}
                         value={confirmPin}
+                        autoComplete="new-password"
                         onChange={(e) => setConfirmPin(e.target.value.replace(/\D/g, ''))}
                         className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
                         placeholder="Confirm new PIN"
