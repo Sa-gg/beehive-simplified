@@ -71,6 +71,22 @@ export const AccountFormModal = React.memo(({
     setFormData(prev => ({ ...prev, role }))
   }, [])
 
+  const normalizePhone = (value: string): string => {
+    // Strip all spaces and dashes
+    let v = value.replace(/[\s-]/g, '')
+    // Convert +639XXXXXXXXX or 639XXXXXXXXX → 09XXXXXXXXX
+    if (v.startsWith('+639')) v = '0' + v.slice(2)
+    else if (v.startsWith('639') && v.length === 12) v = '0' + v.slice(2)
+    return v
+  }
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const normalized = normalizePhone(e.target.value)
+    setFormData(prev => ({ ...prev, phone: normalized }))
+  }
+
+  const phoneIsValid = (phone: string) => /^09[0-9]{9}$/.test(phone)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -81,6 +97,16 @@ export const AccountFormModal = React.memo(({
 
     if (formData.password && formData.password !== formData.confirmPassword) {
       toast.warning('Validation Error', 'Passwords do not match')
+      return
+    }
+
+    if (formData.phone && !phoneIsValid(formData.phone)) {
+      toast.warning('Validation Error', 'Phone must start with 09 and be 11 digits (e.g. 09123456789)')
+      return
+    }
+
+    if (!editingUser && !formData.phone) {
+      toast.warning('Validation Error', 'Phone number is required')
       return
     }
 
@@ -251,15 +277,23 @@ export const AccountFormModal = React.memo(({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="phone" className="text-sm font-semibold text-gray-700 mb-2 block">
-                Phone Number
+                Phone Number {!editingUser && <span className="text-red-500">*</span>}
               </Label>
               <Input
                 id="phone"
                 value={formData.phone}
-                onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                placeholder="+63 912 345 6789"
-                className="h-11"
+                onChange={handlePhoneChange}
+                placeholder="09123456789"
+                maxLength={11}
+                className={`h-11 ${
+                  formData.phone && !phoneIsValid(formData.phone)
+                    ? 'border-red-300 focus:ring-red-500'
+                    : ''
+                }`}
               />
+              {formData.phone && !phoneIsValid(formData.phone) && (
+                <p className="text-xs text-red-500 mt-1">Must start with 09 and be 11 digits</p>
+              )}
             </div>
           </div>
 

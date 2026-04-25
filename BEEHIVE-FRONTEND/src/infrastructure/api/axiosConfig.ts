@@ -39,8 +39,16 @@ api.interceptors.response.use(
     if (error.code === 'ERR_NETWORK') {
       console.error('Network Error: Cannot reach backend at', API_BASE_URL);
       console.error('Make sure backend is running and accessible from this device');
+      return Promise.reject(new Error('Cannot connect to server. Make sure the system is running.'));
     }
-    console.error('API Error:', error.response?.data || error.message);
+    // Surface the server\'s descriptive error message instead of the generic axios one
+    const serverMessage =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      error.response?.data?.details;
+    if (serverMessage && typeof serverMessage === 'string') {
+      return Promise.reject(new Error(serverMessage));
+    }
     return Promise.reject(error);
   }
 );

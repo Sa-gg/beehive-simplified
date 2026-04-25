@@ -30,10 +30,10 @@ export class AuthService {
     if (!data.phone) {
       throw new Error('Phone number is required');
     }
-    
-    const phoneRegex = /^[+]?[0-9\s-]{10,15}$/;
+
+    const phoneRegex = /^09[0-9]{9}$/;
     if (!phoneRegex.test(data.phone.replace(/\s/g, ''))) {
-      throw new Error('Invalid phone number format');
+      throw new Error('Phone number must start with 09 and be 11 digits (e.g. 09123456789)');
     }
 
     // Check if phone already exists
