@@ -138,7 +138,7 @@ const orderController = new OrderController(orderService);
 
 // Initialize Auth architecture layers
 const authRepository = new AuthRepository(prisma);
-const authService = new AuthService(authRepository);
+const authService = new AuthService(authRepository, settingsRepository);
 const authController = new AuthController(authService);
 
 // Initialize Inventory architecture layers

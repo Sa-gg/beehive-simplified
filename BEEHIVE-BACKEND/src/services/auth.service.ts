@@ -1,14 +1,17 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { AuthRepository } from "../repositories/auth.repository.js";
+import { SettingsRepository } from "../repositories/settings.repository.js";
 import { RegisterDTO, LoginDTO, UpdateUserDTO, UserDTO, AuthResponse } from "../types/auth.types.js";
 
 export class AuthService {
   private authRepository: AuthRepository;
+  private settingsRepository: SettingsRepository;
   private jwtSecret: string;
 
-  constructor(authRepository: AuthRepository) {
+  constructor(authRepository: AuthRepository, settingsRepository: SettingsRepository) {
     this.authRepository = authRepository;
+    this.settingsRepository = settingsRepository;
     this.jwtSecret = process.env.JWT_SECRET || 'beehive-secret-key-change-in-production';
   }
 
@@ -196,35 +199,28 @@ export class AuthService {
     }
   }
 
-  // Validate manager PIN for authorization
-  // PIN format: For simplicity, we use the last 4-6 digits of the manager's phone number
-  // or a specially set PIN field. Here we'll check against password as a PIN for demo.
-  // In production, you'd have a separate managerPin field in the users table.
+  // Validate manager PIN for authorization using the stored settings PIN
   async validateManagerPin(pin: string): Promise<{ valid: boolean; manager?: { id: string; name: string } }> {
-    // Find all managers/admins
-    const managers = await this.authRepository.findAll('MANAGER');
-    const admins = await this.authRepository.findAll('ADMIN');
-    const allManagers = [...managers, ...admins];
-
-    // For demo purposes: PIN is the phone number's last 4 digits or '1234' as default
-    for (const manager of allManagers) {
-      // Check if PIN matches:
-      // 1. Last 4 digits of phone number
-      // 2. Or compare against a default PIN pattern based on name (for demo)
-      const phoneLast4 = manager.phone?.replace(/\D/g, '').slice(-4) || '';
-      const defaultPin = '1234'; // Fallback default manager PIN for testing
-      
-      if (pin === phoneLast4 || pin === defaultPin) {
-        return {
-          valid: true,
-          manager: {
-            id: manager.id,
-            name: manager.name
-          }
-        };
-      }
+    // Check against the stored PIN in settings
+    if (!this.settingsRepository.validateManagerPin(pin)) {
+      throw new Error('Invalid manager PIN');
     }
 
-    throw new Error('Invalid manager PIN');
+    // PIN valid — return the first active manager/admin as the authorizer
+    const managers = await this.authRepository.findAll('MANAGER');
+    const admins = await this.authRepository.findAll('ADMIN');
+    const allManagers = [...managers, ...admins].filter(u => u.isActive !== false);
+
+    if (allManagers.length === 0) {
+      throw new Error('No manager account found');
+    }
+
+    return {
+      valid: true,
+      manager: {
+        id: allManagers[0].id,
+        name: allManagers[0].name
+      }
+    };
   }
 }

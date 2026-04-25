@@ -198,6 +198,7 @@ export class OrderController {
       const processedBy = (req as any).user?.name || null;
       
       const order = await this.orderService.updateOrder(req.params.id, {
+        status: 'COMPLETED',
         paymentStatus: 'REFUNDED',
         notes: reason,
         authorizedBy: authorizedBy,
@@ -226,6 +227,7 @@ export class OrderController {
       const processedBy = (req as any).user?.name || null;
       
       const order = await this.orderService.updateOrder(req.params.id, {
+        status: 'COMPLETED',
         paymentStatus: 'COMPLIMENTARY',
         notes: reason,
         authorizedBy: authorizedBy,
@@ -255,6 +257,7 @@ export class OrderController {
       const processedBy = (req as any).user?.name || null;
       
       const order = await this.orderService.updateOrder(req.params.id, {
+        status: 'COMPLETED',
         paymentStatus: 'WRITTEN_OFF',
         notes: reason,
         authorizedBy: authorizedBy,
