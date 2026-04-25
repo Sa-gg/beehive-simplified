@@ -93,6 +93,15 @@ if exist "!BACKEND_DIR!\dist\index.js" exit /b 0
 
 echo Backend not built. Building backend, please wait...
 pushd "!BACKEND_DIR!"
+if not exist "node_modules" (
+    echo Installing backend dependencies...
+    call npm install
+    if errorlevel 1 (
+        echo ERROR: npm install failed for backend.
+        popd
+        exit /b 1
+    )
+)
 call npm run build
 set "BUILD_RC=!errorlevel!"
 popd
@@ -107,6 +116,15 @@ rem -------------------------------------------------------
 if not exist "!FRONTEND_DIR!\dist\index.html" (
     echo Frontend not built. Building frontend, please wait...
     pushd "!FRONTEND_DIR!"
+    if not exist "node_modules" (
+        echo Installing frontend dependencies...
+        call npm install
+        if errorlevel 1 (
+            echo ERROR: npm install failed for frontend.
+            popd
+            exit /b 1
+        )
+    )
     call npm run build
     set "FRONTEND_BUILD_RC=!errorlevel!"
     popd
