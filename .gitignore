@@ -8,3 +8,10 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+
+# Local runtime artifacts
+*.log
+*.out
+
+# VS Code extension local database/reports
+.vscode/code-counter/
