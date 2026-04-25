@@ -47,12 +47,38 @@ set "PORT=!PORT: =!"
 if not defined PORT set "PORT=3000"
 
 echo.
-echo Starting server on port !PORT!...
-start "" cmd /c "timeout /t 4 /nobreak >nul && start http://localhost:!PORT!"
+echo Checking for existing server on port !PORT!...
+set "OLD_PID="
+for /f "tokens=5" %%a in ('netstat -ano 2^>nul ^| findstr ":!PORT! " ^| findstr "LISTENING"') do (
+    if not defined OLD_PID set "OLD_PID=%%a"
+)
+if defined OLD_PID (
+    echo    Found existing server ^(PID !OLD_PID!^). Stopping it...
+    taskkill /f /pid !OLD_PID! >nul 2>&1
+    timeout /t 2 /nobreak >nul
+) else (
+    echo    No existing server found.
+)
 
-cd /d "!BACKEND_DIR!"
-node dist\index.js
-exit /b %errorlevel%
+echo Starting server on port !PORT! ^(background^)...
+powershell -Command "Start-Process -FilePath 'node' -ArgumentList 'dist\index.js' -WorkingDirectory '!BACKEND_DIR!' -WindowStyle Hidden -RedirectStandardOutput '!BACKEND_DIR!\server.log' -RedirectStandardError '!BACKEND_DIR!\server-error.log'"
+
+echo.
+echo ============================================
+echo  Server running on http://localhost:!PORT!
+echo  It runs in the background.
+echo  This window can be safely closed.
+echo  To stop: Task Manager ^> end node.exe
+echo  Logs: BEEHIVE-BACKEND\server.log
+echo ============================================
+echo.
+
+timeout /t 3 /nobreak >nul
+start "" "http://localhost:!PORT!"
+
+echo Press any key to close this window...
+pause >nul
+exit /b 0
 
 rem -------------------------------------------------------
 :findBackend

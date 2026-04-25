@@ -104,11 +104,10 @@ async function seedUsers() {
   const defaultPassword = await bcrypt.hash('password123', 10);
 
   const users = [
-    { id: `user-admin-${Date.now()}`, email: 'admin@beehive.com', name: 'Admin User', role: 'ADMIN' as const, phone: '+1234567800' },
-    { id: `user-manager-${Date.now() + 1}`, email: 'manager@beehive.com', name: 'Manager User', role: 'MANAGER' as const, phone: '+1234567890' },
-    { id: `user-cashier-${Date.now() + 2}`, email: 'cashier@beehive.com', name: 'Cashier User', role: 'CASHIER' as const, phone: '+1234567891' },
-    { id: `user-cook-${Date.now() + 3}`, email: 'cook@beehive.com', name: 'Cook User', role: 'COOK' as const, phone: '+1234567892' },
-    { id: `user-customer-${Date.now() + 4}`, email: 'customer@beehive.com', name: 'Customer User', role: 'CUSTOMER' as const, phone: '+1234567893', cardNumber: `BH${Date.now().toString().slice(-8)}` },
+    { id: `user-admin-${Date.now()}`, email: 'admin@beehive.com', name: 'Admin User', role: 'ADMIN' as const, phone: '09511617396' },
+    { id: `user-manager-${Date.now() + 1}`, email: 'manager@beehive.com', name: 'Manager User', role: 'MANAGER' as const, phone: '09123456789' },
+    { id: `user-cashier-${Date.now() + 2}`, email: 'cashier@beehive.com', name: 'Cashier User', role: 'CASHIER' as const, phone: '09234567890' },
+    { id: `user-cook-${Date.now() + 3}`, email: 'cook@beehive.com', name: 'Cook User', role: 'COOK' as const, phone: '09345678901' },
   ];
 
   for (const user of users) {

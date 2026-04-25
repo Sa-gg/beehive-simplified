@@ -453,13 +453,15 @@ export const AccountsPage = () => {
                               <Pencil className="h-4 w-4" />
                             </button>
                             {user.isActive ? (
-                              <button
-                                onClick={() => handleArchiveClick(user.id, user.name)}
-                                className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
-                                title="Archive Account"
-                              >
-                                <Archive className="h-4 w-4" />
-                              </button>
+                              user.role !== 'ADMIN' && (
+                                <button
+                                  onClick={() => handleArchiveClick(user.id, user.name)}
+                                  className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                                  title="Archive Account"
+                                >
+                                  <Archive className="h-4 w-4" />
+                                </button>
+                              )
                             ) : (
                               <button
                                 onClick={() => handleRestore(user.id, user.name)}
