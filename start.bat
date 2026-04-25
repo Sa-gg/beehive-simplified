@@ -62,11 +62,17 @@ if defined OLD_PID (
 
 echo Starting server in background...
 
+rem Detect absolute path to node.exe so it works even if not in system PATH
+set "NODE_EXE=node"
+for /f "delims=" %%n in ('where node 2^>nul') do (
+    if not defined _NODE_FOUND set "NODE_EXE=%%n" & set "_NODE_FOUND=1"
+)
+
 rem Write a launcher batch file - avoids VBScript PATH inheritance issues
 set "LAUNCHER=%TEMP%\beehive_launcher.bat"
 > "!LAUNCHER!" echo @echo off
 >> "!LAUNCHER!" echo cd /d "!BACKEND_DIR!"
->> "!LAUNCHER!" echo node dist\index.js ^>^> "!BACKEND_DIR!\server.log" 2^>^&1
+>> "!LAUNCHER!" echo "!NODE_EXE!" "!BACKEND_DIR!\node_modules\tsx\dist\cli.mjs" index.ts ^>^> "!BACKEND_DIR!\server.log" 2^>^&1
 
 rem Clear old log so we can check for fresh errors
 if exist "!BACKEND_DIR!\server.log" del "!BACKEND_DIR!\server.log" >nul 2>&1
@@ -157,26 +163,23 @@ exit /b 0
 
 rem -------------------------------------------------------
 :ensureBackendBuild
-if exist "!BACKEND_DIR!\dist\index.js" exit /b 0
+if exist "!BACKEND_DIR!\node_modules\.bin\tsx.cmd" exit /b 0
 
-echo Backend not built. Building backend, please wait...
+echo Installing backend dependencies (first run may take a few minutes)...
 pushd "!BACKEND_DIR!"
-if not exist "node_modules" (
-    echo Installing backend dependencies...
-    call npm install
-    if errorlevel 1 (
-        echo ERROR: npm install failed for backend.
-        popd
-        exit /b 1
-    )
-)
-call npm run build
-set "BUILD_RC=!errorlevel!"
-popd
-if not "!BUILD_RC!"=="0" (
-    echo ERROR: Backend build failed.
+call npm install
+set "INSTALL_RC=!errorlevel!"
+if not "!INSTALL_RC!"=="0" (
+    echo ERROR: npm install failed for backend.
+    popd
     exit /b 1
 )
+echo Generating Prisma client...
+call npx prisma generate
+if errorlevel 1 (
+    echo WARNING: prisma generate had issues. Continuing anyway...
+)
+popd
 exit /b 0
 
 rem -------------------------------------------------------
