@@ -61,17 +61,46 @@ if defined OLD_PID (
 )
 
 echo Starting server in background...
-set "VBS=%TEMP%\beehive-start.vbs"
-echo Set oShell = WScript.CreateObject("WScript.Shell") > "!VBS!"
-echo oShell.CurrentDirectory = "!BACKEND_DIR!" >> "!VBS!"
-echo oShell.Run "cmd /c node dist\index.js ^>^> server.log 2^>^&1", 0, False >> "!VBS!"
+
+rem Write a launcher batch file - avoids VBScript PATH inheritance issues
+set "LAUNCHER=%TEMP%\beehive_launcher.bat"
+> "!LAUNCHER!" echo @echo off
+>> "!LAUNCHER!" echo cd /d "!BACKEND_DIR!"
+>> "!LAUNCHER!" echo node dist\index.js ^>^> "!BACKEND_DIR!\server.log" 2^>^&1
+
+rem Clear old log so we can check for fresh errors
+if exist "!BACKEND_DIR!\server.log" del "!BACKEND_DIR!\server.log" >nul 2>&1
+
+rem Run launcher hidden via VBScript
+set "VBS=%TEMP%\beehive_launch.vbs"
+> "!VBS!" echo CreateObject("WScript.Shell").Run "cmd /c """"!LAUNCHER!""""", 0, False
 wscript //nologo "!VBS!"
 
-echo Waiting for server to be ready...
-powershell -NoProfile -Command "for($i=0;$i-lt60;$i++){ try{ $t=New-Object System.Net.Sockets.TcpClient; $t.Connect('localhost',!PORT!); $t.Close(); exit 0 }catch{ Start-Sleep 1 } }; exit 1" >nul 2>&1
-if errorlevel 1 (
-    echo WARNING: Server did not respond in 60 seconds.
-    echo Check BEEHIVE-BACKEND\server.log for errors.
+echo Waiting for server to be ready on port !PORT!...
+set "READY=0"
+for /l %%i in (1,1,60) do (
+    if "!READY!"=="0" (
+        powershell -NoProfile -Command "try{$t=New-Object Net.Sockets.TcpClient;$t.Connect('localhost',!PORT!);$t.Close();exit 0}catch{exit 1}" >nul 2>&1
+        if not errorlevel 1 set "READY=1"
+        if "!READY!"=="0" (
+            timeout /t 1 /nobreak >nul 2>&1
+        )
+    )
+)
+
+if "!READY!"=="0" (
+    echo.
+    echo ERROR: Server did not start after 60 seconds.
+    echo.
+    if exist "!BACKEND_DIR!\server.log" (
+        echo Last log output:
+        echo ----------------------------------------
+        powershell -NoProfile -Command "if(Test-Path '!BACKEND_DIR!\server.log'){Get-Content '!BACKEND_DIR!\server.log' -Tail 20}"
+        echo ----------------------------------------
+    ) else (
+        echo No log file found. node.exe may not be in PATH.
+        echo Try running: where node
+    )
     pause
     exit /b 1
 )
