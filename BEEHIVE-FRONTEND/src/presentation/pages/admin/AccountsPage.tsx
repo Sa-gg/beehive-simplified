@@ -19,9 +19,12 @@ import {
   ChefHat,
   Store,
   Archive,
-  RotateCcw
+  RotateCcw,
+  Eye,
+  EyeOff
 } from 'lucide-react'
 import { authApi, type User as UserType } from '../../../infrastructure/api/auth.api'
+import { settingsApi } from '../../../infrastructure/api/settings.api'
 import { useAuthStore } from '../../store/authStore'
 import { toast } from '../../components/common/ToastNotification'
 import { ConfirmationModal } from '../../components/common/ConfirmationModal'
@@ -58,6 +61,32 @@ export const AccountsPage = () => {
   // Check if current user is admin (can manage permissions)
   const isAdmin = currentUser?.role === 'ADMIN'
   const isManager = currentUser?.role === 'MANAGER'
+  
+  // Manager PIN view state (admin only)
+  const [showManagerPin, setShowManagerPin] = useState(false)
+  const [managerPinValue, setManagerPinValue] = useState<string | null>(null)
+  const [loadingManagerPin, setLoadingManagerPin] = useState(false)
+
+  const handleViewManagerPin = async () => {
+    if (showManagerPin) {
+      setShowManagerPin(false)
+      return
+    }
+    if (managerPinValue !== null) {
+      setShowManagerPin(true)
+      return
+    }
+    setLoadingManagerPin(true)
+    try {
+      const res = await settingsApi.getManagerPin()
+      setManagerPinValue(res.pin)
+      setShowManagerPin(true)
+    } catch {
+      toast.error('Failed to load manager PIN')
+    } finally {
+      setLoadingManagerPin(false)
+    }
+  }
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
@@ -315,6 +344,34 @@ export const AccountsPage = () => {
             <p className="text-lg lg:text-xl font-bold text-emerald-600">{stats.activeUsers}</p>
           </div>
         </div>
+
+        {/* Manager PIN Card (admin only) */}
+        {isAdmin && (
+          <div className="flex items-center gap-4 bg-amber-50 border border-amber-200 rounded-2xl px-5 py-4 shadow-sm">
+            <div className="p-2.5 bg-amber-100 rounded-xl shrink-0">
+              <Shield className="h-5 w-5 text-amber-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-amber-700">Manager Authorization PIN</p>
+              <p className="text-lg font-mono font-bold text-amber-900 tracking-widest mt-0.5">
+                {showManagerPin && managerPinValue !== null ? managerPinValue : '••••'}
+              </p>
+            </div>
+            <button
+              onClick={handleViewManagerPin}
+              disabled={loadingManagerPin}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-amber-700 bg-amber-100 hover:bg-amber-200 border border-amber-300 rounded-lg transition-colors"
+            >
+              {loadingManagerPin ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : showManagerPin ? (
+                <><EyeOff className="h-4 w-4" />Hide</>
+              ) : (
+                <><Eye className="h-4 w-4" />View PIN</>
+              )}
+            </button>
+          </div>
+        )}
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3 bg-white p-4 rounded-xl border border-gray-100">

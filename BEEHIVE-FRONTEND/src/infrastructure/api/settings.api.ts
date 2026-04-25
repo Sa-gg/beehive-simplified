@@ -71,6 +71,11 @@ export const settingsApi = {
     return response.data;
   },
   
+  getManagerPin: async (): Promise<{ pin: string }> => {
+    const response = await api.get<{ pin: string }>('/api/settings/manager-pin');
+    return response.data;
+  },
+
   validateManagerPin: async (pin: string): Promise<{ valid: boolean }> => {
     const response = await api.post<{ valid: boolean }>('/api/settings/validate-pin', { pin });
     return response.data;

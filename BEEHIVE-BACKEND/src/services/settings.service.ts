@@ -22,6 +22,10 @@ class SettingsService {
     return this.settingsRepository.validateManagerPin(pin);
   }
   
+  getManagerPin(): string {
+    return this.settingsRepository.getManagerPin();
+  }
+  
   updateManagerPin(pin: string): void {
     this.settingsRepository.setManagerPin(pin);
   }

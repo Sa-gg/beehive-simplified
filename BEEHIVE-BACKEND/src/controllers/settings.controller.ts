@@ -45,6 +45,16 @@ class SettingsController {
       res.status(500).json({ error: 'Failed to reset order numbers' });
     }
   };
+
+  getManagerPin = async (req: Request, res: Response) => {
+    try {
+      const pin = this.settingsService.getManagerPin();
+      res.json({ pin });
+    } catch (error) {
+      console.error('Error getting manager PIN:', error);
+      res.status(500).json({ error: 'Failed to get manager PIN' });
+    }
+  };
   
   validateManagerPin = async (req: Request, res: Response) => {
     try {

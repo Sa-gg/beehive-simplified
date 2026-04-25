@@ -15,7 +15,9 @@ import {
   Key,
   LayoutDashboard,
   Smartphone,
-  RefreshCw
+  RefreshCw,
+  Eye,
+  EyeOff
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { toast } from '../../components/common/ToastNotification'
@@ -183,6 +185,31 @@ export const SettingsPage = () => {
   const [newPin, setNewPin] = useState('')
   const [confirmPin, setConfirmPin] = useState('')
   const [pinError, setPinError] = useState('')
+  // View current PIN state (admin only)
+  const [showCurrentPin, setShowCurrentPin] = useState(false)
+  const [currentPinValue, setCurrentPinValue] = useState<string | null>(null)
+  const [loadingPin, setLoadingPin] = useState(false)
+
+  const handleViewPin = async () => {
+    if (showCurrentPin) {
+      setShowCurrentPin(false)
+      return
+    }
+    if (currentPinValue !== null) {
+      setShowCurrentPin(true)
+      return
+    }
+    setLoadingPin(true)
+    try {
+      const res = await settingsApi.getManagerPin()
+      setCurrentPinValue(res.pin)
+      setShowCurrentPin(true)
+    } catch {
+      toast.error('Failed to load current PIN')
+    } finally {
+      setLoadingPin(false)
+    }
+  }
 
   // Sync with backend settings on mount
   useEffect(() => {
@@ -901,6 +928,32 @@ export const SettingsPage = () => {
                 color="amber"
               />
               <div className="px-6 py-5">
+                {/* View current PIN (admin only) */}
+                {user?.role === 'ADMIN' && (
+                  <div className="flex items-center gap-3 mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                    <Key className="h-4 w-4 text-amber-600 shrink-0" />
+                    <div className="flex-1">
+                      <p className="text-xs font-medium text-amber-700 mb-0.5">Current Manager PIN</p>
+                      <p className="text-sm font-mono font-bold text-amber-900 tracking-widest">
+                        {showCurrentPin && currentPinValue !== null ? currentPinValue : '••••'}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleViewPin}
+                      disabled={loadingPin}
+                      className="p-1.5 text-amber-600 hover:text-amber-800 hover:bg-amber-100 rounded-lg transition-colors"
+                      title={showCurrentPin ? 'Hide PIN' : 'View PIN'}
+                    >
+                      {loadingPin ? (
+                        <span className="text-xs">...</span>
+                      ) : showCurrentPin ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                )}
                 {!showPinChange ? (
                   <button
                     onClick={() => setShowPinChange(true)}
