@@ -55,13 +55,26 @@ if errorlevel 1 (
 echo.
 
 echo [4/5] Running database migrations...
-call npx prisma migrate deploy
+echo    Applying schema to database (resets existing schema)...
+echo y| call npx prisma db push --force-reset --skip-generate
 if errorlevel 1 (
-    echo ERROR: Migration failed.
+    echo ERROR: Could not apply database schema.
     echo Make sure PostgreSQL is running and DATABASE_URL in .env is correct.
     pause
     exit /b 1
 )
+echo    Syncing migration history...
+call npx prisma migrate resolve --applied "0_baseline" >nul 2>&1
+call npx prisma migrate resolve --applied "20251213151850_initial" >nul 2>&1
+call npx prisma migrate resolve --applied "20251213164836_initial_schema" >nul 2>&1
+call npx prisma migrate resolve --applied "20251213195920_add_order_type" >nul 2>&1
+call npx prisma migrate resolve --applied "20251214022334_add_users_and_auth" >nul 2>&1
+call npx prisma migrate resolve --applied "20251214163013_add_mood_tracking" >nul 2>&1
+call npx prisma migrate resolve --applied "20251214165100_add_inventory" >nul 2>&1
+call npx prisma migrate resolve --applied "20251214181612_add_expenses" >nul 2>&1
+call npx prisma migrate resolve --applied "20251226111308_add_smart_inventory_tracking" >nul 2>&1
+call npx prisma migrate resolve --applied "20251226133952_add_linked_order_id" >nul 2>&1
+call npx prisma migrate resolve --applied "20251227160306_add_mood_feedback_tracking" >nul 2>&1
 echo.
 
 echo [5/5] Seeding admin account and default menu data...
