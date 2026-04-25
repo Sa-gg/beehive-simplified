@@ -60,20 +60,33 @@ if defined OLD_PID (
     echo    No existing server found.
 )
 
-echo Starting server on port !PORT! ^(background^)...
-powershell -Command "Start-Process -FilePath 'node' -ArgumentList 'dist\index.js' -WorkingDirectory '!BACKEND_DIR!' -WindowStyle Hidden -RedirectStandardOutput '!BACKEND_DIR!\server.log' -RedirectStandardError '!BACKEND_DIR!\server-error.log'"
+echo Starting server in background...
+set "VBS=%TEMP%\beehive-start.vbs"
+echo Set oShell = WScript.CreateObject("WScript.Shell") > "!VBS!"
+echo oShell.CurrentDirectory = "!BACKEND_DIR!" >> "!VBS!"
+echo oShell.Run "cmd /c node dist\index.js ^>^> server.log 2^>^&1", 0, False >> "!VBS!"
+wscript //nologo "!VBS!"
+
+echo Waiting for server to be ready...
+powershell -NoProfile -Command "for($i=0;$i-lt60;$i++){ try{ $t=New-Object System.Net.Sockets.TcpClient; $t.Connect('localhost',!PORT!); $t.Close(); exit 0 }catch{ Start-Sleep 1 } }; exit 1" >nul 2>&1
+if errorlevel 1 (
+    echo WARNING: Server did not respond in 60 seconds.
+    echo Check BEEHIVE-BACKEND\server.log for errors.
+    pause
+    exit /b 1
+)
+echo Server is ready!
 
 echo.
 echo ============================================
-echo  Server running on http://localhost:!PORT!
-echo  It runs in the background.
+echo  BEEHIVE is running at http://localhost:!PORT!
+echo  The server runs in the background.
 echo  This window can be safely closed.
 echo  To stop: Task Manager ^> end node.exe
 echo  Logs: BEEHIVE-BACKEND\server.log
 echo ============================================
 echo.
 
-timeout /t 3 /nobreak >nul
 start "" "http://localhost:!PORT!"
 
 echo Press any key to close this window...
