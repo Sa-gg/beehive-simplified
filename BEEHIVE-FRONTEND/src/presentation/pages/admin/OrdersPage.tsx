@@ -12,6 +12,7 @@ import { ManagerPinModal } from '../../components/common/ManagerPinModal'
 import { CashCalculatorModal } from '../../components/common/CashCalculatorModal'
 import { generateReceiptHTML, generateMergedReceiptHTML, generateLinkedOrdersReceiptHTML, type ReceiptItem } from '../../../shared/utils/receiptTemplate'
 import { useSettingsStore } from '../../store/settingsStore'
+import { useAuthStore } from '../../store/authStore'
 import { toast } from '../../components/common/ToastNotification'
 
 // Helper to format order number - removes date prefix for cleaner display
@@ -86,8 +87,14 @@ export const OrdersPage = () => {
     statusSeparatorDirection, 
     setStatusSeparatorDirection,
     linkedOrdersEnabled,
-    allowVoidOrderItem
+    allowVoidOrderItem,
+    cashierCanVoidWithoutPin,
+    cashierCanRefundWithoutPin,
+    cashierCanComplimentaryWithoutPin,
+    cashierCanWriteOffWithoutPin,
+    cashierCanVoidAndReorderWithoutPin
   } = useSettingsStore()
+  const { user: currentUser } = useAuthStore()
   const [orders, setOrders] = useState<Order[]>([])
   const [selectedStatus, setSelectedStatus] = useState<string>('all')
   const [selectedOrderType, setSelectedOrderType] = useState<string>('all')
@@ -429,14 +436,32 @@ export const OrdersPage = () => {
     setOpenMoreActionsId(null)
   }
 
-  // Handle reason submission and open PIN modal
+  // Handle reason submission and open PIN modal (or skip PIN if cashier has permission)
   const handleReasonSubmit = () => {
     if (!actionReason.trim()) {
       toast.warning('Reason Required', 'Please enter a reason for this action')
       return
     }
     setShowReasonModal(false)
-    setShowManagerPinModal(true)
+
+    const isCashier = currentUser?.role === 'CASHIER'
+
+    // Check if this cashier is allowed to skip PIN for this action type
+    const canSkipPin =
+      isCashier && pendingAction && (
+        (pendingAction.type === 'void' && cashierCanVoidWithoutPin) ||
+        (pendingAction.type === 'refund' && cashierCanRefundWithoutPin) ||
+        (pendingAction.type === 'complimentary' && cashierCanComplimentaryWithoutPin) ||
+        (pendingAction.type === 'writeOff' && cashierCanWriteOffWithoutPin) ||
+        (pendingAction.type === 'voidAndReorder' && cashierCanVoidAndReorderWithoutPin)
+      )
+
+    if (canSkipPin) {
+      // Execute directly without PIN — use the cashier's own ID/name as authorizer
+      executePendingAction(currentUser!.id, currentUser!.name)
+    } else {
+      setShowManagerPinModal(true)
+    }
   }
 
   // Execute the pending action after manager authorization
