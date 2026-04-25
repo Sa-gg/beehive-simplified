@@ -56,7 +56,7 @@ echo.
 
 echo [4/5] Running database migrations...
 echo    Applying schema to database (resets existing schema)...
-echo y| call npx prisma db push --force-reset --skip-generate
+echo y| call npx prisma db push --force-reset
 if errorlevel 1 (
     echo ERROR: Could not apply database schema.
     echo Make sure PostgreSQL is running and DATABASE_URL in .env is correct.
