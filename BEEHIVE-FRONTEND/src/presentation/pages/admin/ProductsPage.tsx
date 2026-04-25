@@ -221,8 +221,8 @@ export const ProductsPage = () => {
       await fetchProducts()
     } catch (error) {
       console.error('Failed to delete product:', error)
-      const err = error as { response?: { data?: { message?: string } } }
-      toast.error('Failed to delete product', err.response?.data?.message || 'Please try again.')
+      const message = error instanceof Error ? error.message : 'Please try again.'
+      toast.error('Failed to delete product', message)
     } finally {
       setShowDeleteModal(false)
       setProductToDelete(null)
@@ -1446,6 +1446,9 @@ export const ProductsPage = () => {
             setIsModalOpen(false)
             setEditingProduct(null)
             fetchProducts()
+          }}
+          onDelete={(id, name) => {
+            handleDeleteClick(id, name)
           }}
           editingProduct={editingProduct}
           categories={categories}

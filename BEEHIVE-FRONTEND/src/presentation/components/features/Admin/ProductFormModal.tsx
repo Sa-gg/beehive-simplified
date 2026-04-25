@@ -55,6 +55,7 @@ interface ProductFormModalProps {
   isOpen: boolean
   onClose: () => void
   onSuccess: () => void
+  onDelete?: (id: string, name: string) => void
   editingProduct: Product | null
   categories: CategoryDTO[]
   onOpenCategoryModal: () => void
@@ -72,6 +73,7 @@ export const ProductFormModal = memo(function ProductFormModal({
   isOpen,
   onClose,
   onSuccess,
+  onDelete,
   editingProduct,
   categories,
   onOpenCategoryModal
@@ -645,6 +647,7 @@ export const ProductFormModal = memo(function ProductFormModal({
                   variant="destructive"
                   onClick={() => {
                     onClose()
+                    onDelete?.(editingProduct.id, editingProduct.name)
                   }}
                   disabled={submitting}
                   className="mr-auto"
