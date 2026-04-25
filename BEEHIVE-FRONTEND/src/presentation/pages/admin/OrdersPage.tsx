@@ -445,16 +445,19 @@ export const OrdersPage = () => {
     setShowReasonModal(false)
 
     const isCashier = currentUser?.role === 'CASHIER'
+    const isManager = currentUser?.role === 'MANAGER'
 
-    // Check if this cashier is allowed to skip PIN for this action type
+    // Managers never need a PIN — they are their own authorizer
+    // Cashiers can skip PIN if the relevant setting is enabled
     const canSkipPin =
-      isCashier && pendingAction && (
+      isManager ||
+      (isCashier && pendingAction && (
         (pendingAction.type === 'void' && cashierCanVoidWithoutPin) ||
         (pendingAction.type === 'refund' && cashierCanRefundWithoutPin) ||
         (pendingAction.type === 'complimentary' && cashierCanComplimentaryWithoutPin) ||
         (pendingAction.type === 'writeOff' && cashierCanWriteOffWithoutPin) ||
         (pendingAction.type === 'voidAndReorder' && cashierCanVoidAndReorderWithoutPin)
-      )
+      ))
 
     if (canSkipPin) {
       // Execute directly without PIN — use the cashier's own ID/name as authorizer
