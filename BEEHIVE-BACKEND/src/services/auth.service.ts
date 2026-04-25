@@ -39,7 +39,10 @@ export class AuthService {
     // Check if phone already exists
     const existingByPhone = await this.authRepository.findByPhone(data.phone);
     if (existingByPhone) {
-      throw new Error('Phone number already registered');
+      if (!existingByPhone.isActive) {
+        throw new Error(`This phone number belongs to an archived account (${existingByPhone.name}). Reactivate that account instead of creating a new one.`);
+      }
+      throw new Error('Phone number is already registered to another account.');
     }
 
     // If email is provided, validate and check for duplicates
@@ -51,7 +54,10 @@ export class AuthService {
       
       const existingByEmail = await this.authRepository.findByEmail(data.email);
       if (existingByEmail) {
-        throw new Error('Email already registered');
+        if (!existingByEmail.isActive) {
+          throw new Error(`This email belongs to an archived account (${existingByEmail.name}). Reactivate that account instead of creating a new one.`);
+        }
+        throw new Error('Email is already registered to another account.');
       }
     }
 
