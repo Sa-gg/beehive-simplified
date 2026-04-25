@@ -139,7 +139,7 @@ export const ManagerPinModal = ({
           </div>
 
           {/* Content */}
-          <form onSubmit={handleSubmit} className="p-6">
+          <form onSubmit={handleSubmit} className="p-6" autoComplete="off">
             <div className="space-y-4">
               <div className="text-center">
                 <Lock className="h-12 w-12 text-gray-300 mx-auto mb-3" />
@@ -163,6 +163,7 @@ export const ManagerPinModal = ({
                     error ? 'border-red-300 bg-red-50' : 'border-gray-200'
                   }`}
                   autoComplete="off"
+                  data-form-type="other"
                 />
                 <button
                   type="button"

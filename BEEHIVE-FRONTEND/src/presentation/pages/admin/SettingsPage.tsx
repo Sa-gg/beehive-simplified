@@ -966,10 +966,12 @@ export const SettingsPage = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Current PIN</label>
                       <input
-                        type="password"
+                        type="text"
+                        inputMode="numeric"
                         maxLength={4}
                         value={currentPin}
-                        autoComplete="new-password"
+                        autoComplete="off"
+                        data-form-type="other"
                         onChange={(e) => setCurrentPin(e.target.value.replace(/\D/g, ''))}
                         className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
                         placeholder="Enter current PIN"
@@ -978,10 +980,12 @@ export const SettingsPage = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">New PIN (4 digits)</label>
                       <input
-                        type="password"
+                        type="text"
+                        inputMode="numeric"
                         maxLength={4}
                         value={newPin}
-                        autoComplete="new-password"
+                        autoComplete="off"
+                        data-form-type="other"
                         onChange={(e) => setNewPin(e.target.value.replace(/\D/g, ''))}
                         className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
                         placeholder="Enter new 4-digit PIN"
@@ -990,10 +994,12 @@ export const SettingsPage = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New PIN</label>
                       <input
-                        type="password"
+                        type="text"
+                        inputMode="numeric"
                         maxLength={4}
                         value={confirmPin}
-                        autoComplete="new-password"
+                        autoComplete="off"
+                        data-form-type="other"
                         onChange={(e) => setConfirmPin(e.target.value.replace(/\D/g, ''))}
                         className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
                         placeholder="Confirm new PIN"
