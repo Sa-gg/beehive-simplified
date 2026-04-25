@@ -23,8 +23,11 @@ yarn-debug.log*
 public/uploads/*
 !public/uploads/.gitkeep
 
-# Backups
+# Backups (client data - never commit)
 backups/
+
+# First-time setup marker (local machine only)
+.setup-done
 
 # OS files
 .DS_Store
